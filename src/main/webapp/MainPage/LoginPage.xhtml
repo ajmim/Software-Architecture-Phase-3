@@ -6,11 +6,13 @@ and open the template in the editor.
 -->
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:h="http://xmlns.jcp.org/jsf/html">
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui">
     <h:head>
         <title>SOAR Shop</title>
     </h:head>
     <h:body>
+        <p:clock />
         <h:form>
             <h:panelGrid columns="2">
                 <h:outputText value="Username"/>
@@ -23,6 +25,23 @@ and open the template in the editor.
                 <h:commandButton value="Go Back to Main Menu" action="MainPage.xhtml?faces-redirect=true"/>
             </h:panelGrid>
         </h:form>
+        <!--
+        <h:form>
+            <h:panelGrid columns="2">
+                <h:outputText value="Username"/>
+                <h:inputText value="#{loginBean.username}" />
+                <h:outputText value="Password"/>
+                <h:inputSecret value="#{loginBean.password}" />
+                <br/>
+                <h:commandButton value="Login" action="#{loginBean.studentLogsIn()}"/>
+                <br/>
+                <h:commandButton value="Go Back to Main Menu" action="MainPage.xhtml?faces-redirect=true"/>
+            </h:panelGrid>
+        </h:form>
+        
+        
+        -->
+            
     </h:body>
 </html>
 
