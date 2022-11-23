@@ -1,126 +1,51 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<html xmlns="http://www.w3.org/1999/xhtml"
-    xmlns:h="http://java.sun.com/jsf/html"
-    xmlns:f="http://java.sun.com/jsf/core"
-    xmlns:p="http://primefaces.org/ui">
+<!--
+- bouton profile
+- see all teachers
+- see all courses in the plateforme
+- 
+
+-->
+<!DOCTYPE html>
+<html xmlns:p="http://primefaces.org/ui"
+    xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
     
    <h:head>
         <title>TeacherMain</title>
         <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     </h:head>
     <body>
-        <h1>TeacherMain</h1>
-        <div>
+        <h1>Teacher Main Page</h1>
+        
+         <h:form>
+            <h2>Create a course</h2>
+            <h:panelGrid columns="2">
+                <h:outputText value="Course Title"/>
+                <h:inputText value="#{courseBean.courseTitle}" />
+                <h:outputText value="Set the price"/>
+                <h:inputText value="#{courseBean.price}" />
+                <h:commandButton value="Create the course" action="#{courseBean.createACourse()}"/>
+            </h:panelGrid>
+        </h:form>
+        
+        <h:form>
+            <h2>Delete a course</h2>
+            <h:outputText value="Delete a course"/>
+            <h:inputText value="#{courseBean.courseTitle}" />
+            <h:commandButton value="Delete" action="#{courseBean.deleteACourse(courseBean.findCourseByTitle(courseBean.courseTitle))}"/>
+        </h:form>
+        
+        
+        <h:form>
             <p:button outcome="MyProfileTeacherPage" value="My Profile"/>
-        </div>
-        <div>
+        </h:form>
+        <h:form>
             <p:button outcome="/MainPage/MainPage" value="LogOff"/>
+        </h:form>
 
-        </div>
+        
     </body> 
 </html>
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<!--
-<!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml">
-    <head>
-<style>
-.button {
-  border: none;
-  color: white;
-  padding: 12px 25px;
-  text-align: center;
-  text-decoration: none;
-  display: inline-block;
-  font-size: 12px;
-  margin: 2px 2px;
-  cursor: pointer;
-}
-
-.button1 {background-color: #cb4335;} /* Red */
-.button2 {background-color: #2ecc71;} /* Green */
-
-</style>
-        
-<title>
-    Teacher Portal
-</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-        </head>
-            <body>               
-                <h1> 
-                    Welcome to teacher portal 
-                </h1>       
-                <p>
-                    Vous trouverez ici les informations nécessaires à vos cours :
-                </p>       
-                <a href ="CreateCoursePage.xhtml">
-                    <button class="button button2">
-                        Create New Course
-                    </button>
-                </a>
-        
-                
-                
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Course Name</th>
-                            <th>Price</th>
-                            <th>Enrolled Student</th>
-                        </tr>
-                    </thead>           
-                <tbody>
-                    <tr>
-                        <th>JAVA</th>
-                        <th>32 CHF</th>
-                        <th>28</th>
-                        <th> 
-                        <a href="DeleteCoursePage.xhtml">
-                        <button class="button button1">Delete this course</button> 
-                        </a>
-                        </th>       
-                    </tr>
-                <tr>
-                  <th>Python</th>
-                  <th>37 CHF</th>
-                  <th>27</th>
-                  <th> 
-                      <a href="DeleteCoursePage.xhtml">
-                      <button class="button button1">Delete this course</button> 
-                      </a>
-                  </th>       
-                </tr>
-                </tbody>
-                </table>
-            </body>
-</html>
--->

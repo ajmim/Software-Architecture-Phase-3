@@ -74,9 +74,13 @@ public class CourseBean implements Serializable {
             Database.getInstance().addCourseInApp(new Course(courseTitle, LoginBean.getTeacherLoggedIn(), price));
         }
     }
-
-    public void setPrice(double p) {
-        this.price = p;
+    
+    public double getPrice(){
+        return price;
+    }
+    
+    public void setPrice(double price) {
+        this.price = price;
     }
 
     public void setCourseTitle(String title) {

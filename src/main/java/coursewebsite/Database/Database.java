@@ -22,7 +22,7 @@ public class Database {
         teachers.add(new Teacher("t1", "Vlachos","teacher 1", "t1@", "123"));
         Teacher t2 = new Teacher("t2", "Estier","teacher 2", "t2@", "123");
         teachers.add(t2);
-        Teacher t3 = new Teacher("t3", "DaBoss", "teacher 3", "t3@", "123");
+        Teacher t3 = new Teacher("t3", "Dupont", "teacher 3", "t3@", "123");
         teachers.add(t3);
 
         //courses = new ArrayList<Course>();

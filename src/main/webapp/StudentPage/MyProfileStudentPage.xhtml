@@ -18,37 +18,66 @@
     </h:head>
     <body>
         <h1>Your Profile</h1>
+        <h2>Your info</h2>
         <h:form>
-            <h:outputText value="#{loginBean.getStudentLoggedIn().getUserCourses().size()}"/>
+            <h:panelGrid columns="2">
+                <h:outputText value="Username:"/>
+                <h:outputText value="#{loginBean.currentStudent.username}"/>
+                <h:outputText value="First Name:"/>
+                <h:outputText value="#{loginBean.currentStudent.firstName}"/>
+                <h:outputText value="Last Name:"/>
+                <h:outputText value="#{loginBean.currentStudent.lastName}"/>
+                <h:outputText value="Email:"/>
+                <h:outputText value="#{loginBean.currentStudent.email}"/>
+                <br/>
+            </h:panelGrid>
         </h:form>
         
+        <h2>Your transactions</h2>
+        <h:form>
+            <ui:repeat value="#{userBean.getStudentTransactions()}" var="item">
+                <h:outputText value="-----" />
+                <h:outputText value="#{item.toString()}" />
+                <h:outputText value="-----" />
+            </ui:repeat>
+        </h:form>
+        
+        <h2>Your Courses</h2>
+
         
         <h:form>
-            <h:outputText value="enrolled in" style="font-size: 30px"/>
-            <br/>
             <ui:repeat value="#{loginBean.getStudentLoggedIn().getUserCourses()}" var="item">
                 <h:outputText value="-----" />
                 <h:panelGrid columns="2">
                     <h:outputText value="Title" />
                     <h:outputText value="#{item.title}" />
-                    <h:outputText value="Name teacher:" />
+                    <h:outputText value="Teacher:" />
                     <h:outputText value="#{item.teacher.firstName}" />
                 </h:panelGrid>
                 <h:outputText value="-----" />
             </ui:repeat>
-            <br/>
         </h:form>
+        
+        <h2>Your Balance</h2>
+
+        <h:form>
+            <h:panelGrid columns="2">
+                <h:outputText value="Amount in the account:: "/>
+                <h:outputText value="#{loginBean.currentStudent.balance}" />
+                <h:outputText value="Amount to deposit: "/>
+                <h:inputText value="#{userBean.amount}" />
+                <br/>
+                <h:commandButton value="Deposit Money" action="#{userBean.increaseBalance()}"/>
+                <br/>
+            </h:panelGrid>
+        </h:form>
+        
+        
         <h:form>
             <p:button outcome="StudentMainPage" value="Back to Student Main page"/> 
 
         </h:form>
         
-        <div>
-            <p:button outcome="DepositMoneyPage" value="Deposit Money"/>
-            <p:button outcome="SeeTransactions" value="See your transactions"/>
-            <p:button outcome="InformationsUser" value="Personal informations"/>
-            <p:button outcome="SearchEnrollPage" value="Enrolled courses"/>
-        </div>
        
     </body> 
 </html>

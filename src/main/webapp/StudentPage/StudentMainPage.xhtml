@@ -18,45 +18,24 @@
     </h:head>
     <body>
         <h1>StudentMain</h1>
-        <div>
+
+        <h:form>
+            <h:outputText value="Search for a course "/>
+            <h:inputText value="#{courseBean.courseTitle}" />
+
+            <h:commandButton value="Search" action="/StudentPage/ResultSearchPage.xhtml?faces-redirect=true"/>
+        </h:form>
+        
+        <h:form>
             <p:button outcome="MyProfileStudentPage" value="My Profile"/>
             <p:button outcome="SeeTeacherPage" value="Show Teachers"/> 
             <p:button outcome="ShowAllCourses1" value="Show all courses"/>
-            <p:button outcome="SearchEnrollPage" value="Search and Enroll"/> 
-
-        </div>
-        <div>
+        </h:form>
+        <h:form>
             <p:button outcome="/MainPage/MainPage" value="LogOff"/>
-        </div>
+        </h:form>
+
         
     </body> 
 </html>
 
-<!--
-<html xmlns="http://www.w3.org/1999/xhtml"
-    xmlns:h="http://java.sun.com/jsf/html"
-    xmlns:f="http://java.sun.com/jsf/core"
-    xmlns:p="http://primefaces.org/ui">
-    
-   <h:head>
-        <title>StudentMain</title>
-        <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    </h:head>
-    <body>
-        <h1>StudentMain</h1>
-        <div>
-             <p:button outcome="SeeTeacherPage" value="Show teachers"/> 
-             <p:button outcome="SearchCourse" value="Search a course"/> 
-             <p:button outcome="SeeTransactions" value="See your transactions"/>
-             <p:button outcome="DepositMoneyPage" value="Deposit money"/> 
-            <p:button outcome="EnrollCourse" value="Enroll to a course"/>
-            <p:button outcome="ShowInformations" value="See your informations"/> 
-            
-        </div>
-        <div>
-            <p:button outcome="/MainPage/MainPage" value="LogOff"/>
-
-        </div>
-    </body> 
-</html>
- -->

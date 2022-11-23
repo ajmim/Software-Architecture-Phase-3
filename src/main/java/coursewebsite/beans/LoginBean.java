@@ -38,7 +38,7 @@ public class LoginBean implements Serializable {
             Teacher teacher = findTeacherByUsername(username);
             if (teacher != null && teacher.isPasswordCorrect(password)) {
                 currentTeacher = teacher;
-                return "/TeacherPage/MyProfileTeacherPage.xhtml?faces-redirect=true";
+                return "/TeacherPage/TeacherMainPage.xhtml?faces-redirect=true";
             }
         } catch (DoesNotExistException ex) {
             System.out.println(ex.getMessage());
@@ -81,5 +81,8 @@ public class LoginBean implements Serializable {
     }
     public Student getCurrentStudent() {
         return currentStudent;
+    }
+    public Teacher getCurrentTeacher() {
+        return currentTeacher;
     }
 }

@@ -1,40 +1,72 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
-To change this license header, choose License Headers in Project Properties.
-To change this template file, choose Tools | Templates
-and open the template in the editor.
+- infos sur user
+- See transactions
+- voir enrolled courses
+- deposit money
 -->
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:h="http://xmlns.jcp.org/jsf/html"
-      xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
-      
-    <head>
-        <title>MyProfilTeahncher</title>
-    </head>
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:p="http://primefaces.org/ui"
+    xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+    
+   <h:head>
+        <title>TeacherProfile</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    </h:head>
     <body>
-        
+        <h1>Your Profile</h1>
+        <h2>Your info</h2>
         <h:form>
-            <h:outputText value="Courses in school" style="font-size: 30px"/>
-            <br/>
+            <h:panelGrid columns="2">
+                <h:outputText value="Username:"/>
+                <h:outputText value="#{loginBean.currentTeacher.username}"/>
+                <h:outputText value="First Name:"/>
+                <h:outputText value="#{loginBean.currentTeacher.firstName}"/>
+                <h:outputText value="Last Name:"/>
+                <h:outputText value="#{loginBean.currentTeacher.lastName}"/>
+                <h:outputText value="Email:"/>
+                <h:outputText value="#{loginBean.currentTeacher.email}"/>
+                <h:outputText value="Balance:"/>
+                <h:outputText value="#{loginBean.currentTeacher.balance}"/>
+                <br/>
+            </h:panelGrid>
+        </h:form>
+        
+        <h2>Your transactions</h2>
+        <h:form>
+            <ui:repeat value="#{userBean.getTeacherTransactions()}" var="item">
+                <h:outputText value="-----" />
+                <h:outputText value="#{item.toString()}" />
+                <h:outputText value="-----" />
+            </ui:repeat>
+        </h:form>
+        
+        <h2>Your Courses</h2>
+
+        <h:form>
             <ui:repeat value="#{loginBean.getTeacherLoggedIn().getUserCourses()}" var="item">
                 <h:outputText value="-----" />
                 <h:panelGrid columns="2">
-                    <h:outputText value="Name:" />
+                    <h:outputText value="Title" />
                     <h:outputText value="#{item.title}" />
-                    <h:outputText value="Price:" />
+                    <h:outputText value="Price" />
                     <h:outputText value="#{item.price}" />
-                    <h:outputText value="Name teacher:" />
-                    <h:outputText value="#{item.teacher.firstName}" />
                 </h:panelGrid>
                 <h:outputText value="-----" />
             </ui:repeat>
-            <br/>
-            <h:commandButton value="Go Back to Student Menu" action="/StudentPage/StudentMainPage.xhtml?faces-redirect=true"/>
         </h:form>
         
-    </body>
+        
+        
+        
+        <h:form>
+            <p:button outcome="TeacherMainPage" value="Back to Teacher Main page"/> 
 
-
-
+        </h:form>
+        
+    
+    </body> 
 </html>
