@@ -122,6 +122,9 @@ public class UserBean implements Serializable {
         }
         return false;
     }
+    public double getAmount() {
+        return amount;
+    }
 
     public double getBalance() {
         return amount;
@@ -167,9 +170,9 @@ public class UserBean implements Serializable {
     public void setUsername(String username) {
         this.username = username;
     }
-    
-    public double getAmount() {
-        return amount;
+
+    public void setAmount(double amount) {
+        this.amount = amount;
     }
 
 }
