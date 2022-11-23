@@ -64,7 +64,6 @@ public class UserBean implements Serializable {
                 if(course.equals(c)){throw new AlreadyExistsException("This course is already in your list of courses.");}
             }
             LoginBean.getStudentLoggedIn().enroll(course);
-            System.out.println("Enroll success");
         } catch (InsufficientBalanceException ex) {
             System.out.println(ex.getMessage());
         }
@@ -177,7 +176,14 @@ public class UserBean implements Serializable {
         this.amount = amount;
     }
     
-    public ArrayList<Transaction> getTransactions() {
-        return student.UserTransactions();
+    public ArrayList<Teacher> getAllTeachers() {
+        return Database.getInstance().getTeachers();
+    }
+    
+    public ArrayList<Transaction> getStudentTransactions() {
+        return LoginBean.getStudentLoggedIn().getTransactions();
+    }
+    public ArrayList<Transaction> getTeacherTransactions() {
+        return LoginBean.getTeacherLoggedIn().getTransactions();
     }
 }

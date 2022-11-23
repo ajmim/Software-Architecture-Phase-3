@@ -12,7 +12,7 @@ and open the template in the editor.
     </h:head>
     <h:body>
         <h:form>
-            <h:panelGrid columns="2">
+            <h:panelGrid columns="1">
                 <h:outputText value="Username"/>
                 <h:inputText value="#{loginBean.username}" />
                 <h:outputText value="Password"/>
@@ -20,19 +20,8 @@ and open the template in the editor.
                 <br/>
                 <h:commandButton value="Login" action="#{loginBean.teacherLogsIn()}"/>
                 <br/>
-                <h:commandButton value="Go Back to Main Menu" action="MainPage.xhtml?faces-redirect=true"/>
-            </h:panelGrid>
-        </h:form>
-        <h:form>
-            <h:panelGrid columns="2">
-                <h:outputText value="Username"/>
-                <h:inputText value="#{loginBean.username}" />
-                <h:outputText value="Password"/>
-                <h:inputSecret value="#{loginBean.password}" />
-                <br/>
-                <h:commandButton value="Login" action="#{loginBean.studentLogsIn()}"/>
-                <br/>
-                <h:commandButton value="Go Back to Main Menu" action="MainPage.xhtml?faces-redirect=true"/>
+                <h:commandButton value="Go Back to Main Menu" action="/MainPage.xhtml?faces-redirect=true"/>
+
             </h:panelGrid>
         </h:form>
     </h:body>

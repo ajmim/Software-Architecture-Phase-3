@@ -13,10 +13,11 @@ and open the template in the editor.
         <title>MyProfilTeacher</title>
     </head>
     <body>
+        
         <h:form>
             <h:outputText value="Courses in school" style="font-size: 30px"/>
             <br/>
-            <ui:repeat value="#{courseBean.currentTeacher.getCourses}" var="item">
+            <ui:repeat value="#{loginBean.getTeacherLoggedIn().getUserCourses()}" var="item">
                 <h:outputText value="-----" />
                 <h:panelGrid columns="2">
                     <h:outputText value="Name:" />

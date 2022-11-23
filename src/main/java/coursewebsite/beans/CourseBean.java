@@ -29,9 +29,20 @@ public class CourseBean implements Serializable {
         }
         return false;
     }
+ 
     public ArrayList<Course> getCourses() {
         return Database.getInstance().getCourses();
     }
+ 
+    
+    public ArrayList<Course> getStudentCourses() {
+        return LoginBean.getStudentLoggedIn().getUserCourses();
+    }
+    
+    public ArrayList<Course> getTeacherCourses() {
+        return LoginBean.getTeacherLoggedIn().getUserCourses();
+    }
+    
     public boolean doesCourseExistInApp() {
         for (Course f : Database.getInstance().getCourses()) {
             if (f.getTitle().equals(courseTitle)) {
@@ -40,21 +51,22 @@ public class CourseBean implements Serializable {
         }
         return false;
     }
-    public static void deleteACourse(Course c){
+    
+    public void deleteACourse(Course c) throws DoesNotExistException{
         if(c.getTeacher().equals(LoginBean.getTeacherLoggedIn())){
             Database.getInstance().deleteCourse(c);
-            System.out.println("Deleted successfully.");
         }else{
-            System.out.println("You are not the owner of this course, you can't delete it.");
+            throw new DoesNotExistException("Course " + courseTitle + " does not exist.");
         }
     }
-    public static Course findCourseByTitle(String course) throws DoesNotExistException{
+    
+    public static Course findCourseByTitle(String t) throws DoesNotExistException{
         for (Course c : Database.getInstance().getCourses()) {
-            if (c.getTitle().equals(course)) {
+            if (c.getTitle().equals(t)) {
                 return c;
             }
         }
-        throw new DoesNotExistException("Course " + course + " does not exist.");
+        throw new DoesNotExistException("Course " + t + " does not exist.");
     }
 
     public void createACourse(){
@@ -63,12 +75,12 @@ public class CourseBean implements Serializable {
         }
     }
 
-    public void setPrice(double price) {
-        this.price = price;
+    public void setPrice(double p) {
+        this.price = p;
     }
 
-    public void setCourseTitle(String courseTitle) {
-        this.courseTitle = courseTitle;
+    public void setCourseTitle(String title) {
+        this.courseTitle = title;
     }
 
     public String getCourseTitle() {

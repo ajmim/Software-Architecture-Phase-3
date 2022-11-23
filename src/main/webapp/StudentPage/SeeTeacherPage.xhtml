@@ -19,9 +19,9 @@ Revoir beauté
         <h:form>
             <h:outputText value="Teachers registered" style="font-size: 30px"/>
             <br/>
-            <ui:repeat value="#{courseBean.getCourses()}" var="item">                
+            <ui:repeat value="#{userBean.getAllTeachers()}" var="item">                
                 <h:panelGrid columns="2">
-                    <h:outputText value="Teacher: #{item.teacher.firstName}" />
+                    <h:outputText value="Teacher: #{item.firstName}" />
                 </h:panelGrid>
             </ui:repeat>
             <br/>

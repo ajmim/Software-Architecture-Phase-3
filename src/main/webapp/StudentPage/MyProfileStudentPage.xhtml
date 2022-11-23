@@ -9,7 +9,8 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
     xmlns:h="http://java.sun.com/jsf/html"
     xmlns:f="http://java.sun.com/jsf/core"
-    xmlns:p="http://primefaces.org/ui">
+    xmlns:p="http://primefaces.org/ui"
+    xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
     
    <h:head>
         <title>StudentProfile</title>
@@ -17,6 +18,31 @@
     </h:head>
     <body>
         <h1>Your Profile</h1>
+        <h:form>
+            <h:outputText value="#{loginBean.getStudentLoggedIn().getUserCourses().size()}"/>
+        </h:form>
+        
+        
+        <h:form>
+            <h:outputText value="enrolled in" style="font-size: 30px"/>
+            <br/>
+            <ui:repeat value="#{loginBean.getStudentLoggedIn().getUserCourses()}" var="item">
+                <h:outputText value="-----" />
+                <h:panelGrid columns="2">
+                    <h:outputText value="Title" />
+                    <h:outputText value="#{item.title}" />
+                    <h:outputText value="Name teacher:" />
+                    <h:outputText value="#{item.teacher.firstName}" />
+                </h:panelGrid>
+                <h:outputText value="-----" />
+            </ui:repeat>
+            <br/>
+        </h:form>
+        <h:form>
+            <p:button outcome="StudentMainPage" value="Back to Student Main page"/> 
+
+        </h:form>
+        
         <div>
             <p:button outcome="DepositMoneyPage" value="Deposit Money"/>
             <p:button outcome="SeeTransactions" value="See your transactions"/>

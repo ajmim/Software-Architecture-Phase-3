@@ -41,6 +41,7 @@ public class User{
         return email;
     }
     public double getBalance(){return balance;}
+    
     public ArrayList<Course> getUserCourses() {
         return this.userCourses;
     }
