@@ -3,6 +3,8 @@
 To change this license header, choose License Headers in Project Properties.
 To change this template file, choose Tools | Templates
 and open the template in the editor.
+CODE,DONE!!!
+Revoir beauté
 -->
 <!DOCTYPE html>
 
@@ -15,14 +17,12 @@ and open the template in the editor.
     </head>
     <body>
         <h:form>
-            <h:outputText value="Courses in school" style="font-size: 30px"/>
+            <h:outputText value="Teachers registered" style="font-size: 30px"/>
             <br/>
-            <ui:repeat value="#{courseBean.getCourses()}" var="item">
-                <h:outputText value="-----" />
+            <ui:repeat value="#{courseBean.getCourses()}" var="item">                
                 <h:panelGrid columns="2">
-                    <h:outputText value="#{item.teacher.firstName}" />
+                    <h:outputText value="Teacher: #{item.teacher.firstName}" />
                 </h:panelGrid>
-                <h:outputText value="-----" />
             </ui:repeat>
             <br/>
             <h:commandButton value="Go Back to Main Menu" action="/MainPage/MainPage.xhtml?faces-redirect=true"/>

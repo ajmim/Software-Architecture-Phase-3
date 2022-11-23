@@ -167,9 +167,9 @@ public class UserBean implements Serializable {
     public void setUsername(String username) {
         this.username = username;
     }
-
-    public void setAmount(double amount) {
-        this.amount = amount;
+    
+    public double getAmount() {
+        return amount;
     }
 
 }

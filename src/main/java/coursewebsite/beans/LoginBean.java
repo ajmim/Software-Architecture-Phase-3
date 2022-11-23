@@ -79,4 +79,7 @@ public class LoginBean implements Serializable {
     public void setUsername(String username) {
         this.username = username;
     }
+    public Student getCurrentStudent() {
+        return currentStudent;
+    }
 }
