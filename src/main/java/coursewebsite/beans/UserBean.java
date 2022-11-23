@@ -7,10 +7,12 @@ import coursewebsite.exceptions.InsufficientBalanceException;
 import coursewebsite.models.Course;
 import coursewebsite.models.Student;
 import coursewebsite.models.Teacher;
+import coursewebsite.models.Transaction;
 import java.io.Serializable;
 import javax.enterprise.context.SessionScoped;
 import javax.inject.Named;
 import coursewebsite.beans.LoginBean;
+import java.util.ArrayList;
 
 /**
  *
@@ -174,5 +176,8 @@ public class UserBean implements Serializable {
     public void setAmount(double amount) {
         this.amount = amount;
     }
-
+    
+    public ArrayList<Transaction> getTransactions() {
+        return student.UserTransactions();
+    }
 }
