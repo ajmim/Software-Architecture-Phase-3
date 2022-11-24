@@ -23,7 +23,36 @@ and open the template in the editor....
     xmlns:p="http://primefaces.org/ui">
      
     <h:head>CourseWebsite</h:head>
-    <h:body>   
+    <h:body>  
+
+        <div class="card">
+            <h5 class="mt-0"> </h5>
+            <p:tabMenu activeIndex="#{param.i}">
+                <p:menuitem value="Student Login" outcome="StudentLoginPage.xhtml?faces-redirect=true" icon="pi pi-fw pi-user">
+                    <f:param name="i" value="0"/>
+                </p:menuitem>
+                <p:menuitem value="Teacher Login" outcome="TeacherLogin.xhtml?faces-redirect=true" icon="pi pi-fw pi-user">
+                    <f:param name="i" value="1"/>
+                </p:menuitem>
+                <p:menuitem value="Create Teacher" outcome="CreateTeacherPage.xhtml?faces-redirect=true" icon="pi pi-fw pi-user-edit">
+                    <f:param name="i" value="2"/>
+                </p:menuitem>
+                <p:menuitem value="Create Student" outcome="CreateStudentPage.xhtml?faces-redirect=true" icon="pi pi-fw pi-user-edit">
+                    <f:param name="i" value="3"/>
+                </p:menuitem>
+                <p:menuitem value="Show all courses" outcome="ShowAllCourses.xhtml?faces-redirect=true" icon="pi pi-fw pi-table">
+                    <f:param name="i" value="4"/>
+                </p:menuitem>
+            </p:tabMenu>
+        </div>
+        
+        
+        
+        
+        
+        
+        
+        <!--
          <h:panelGrid id = "panel" columns = "2" border = "1"
             cellpadding = "10" cellspacing = "1">
          <h:link value="Student Login" outcome="StudentLoginPage.xhtml?faces-redirect=true" />
@@ -31,7 +60,7 @@ and open the template in the editor....
          <h:link value="Create Teacher" outcome="CreateTeacherPage.xhtml?faces-redirect=true" />
          <h:link value="Create Student" outcome="CreateStudentPage.xhtml?faces-redirect=true" />
          <h:link value="Show all courses" outcome="ShowAllCourses.xhtml?faces-redirect=true" />
-         </h:panelGrid>
+         </h:panelGrid> -->
     </h:body>
 </html>
 
