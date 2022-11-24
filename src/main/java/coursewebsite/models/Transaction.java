@@ -37,7 +37,7 @@ public class Transaction {
 
     @Override
     public String toString() {
-        return "Transaction between: " + this.student.getUsername() + " and " + this.teacher.getUsername() + " = " + this.amount;
+        return "Transaction between: " + this.student.getFirstName() + " and " + this.teacher.getFirstName() + " = " + this.amount;
     }
 
 }

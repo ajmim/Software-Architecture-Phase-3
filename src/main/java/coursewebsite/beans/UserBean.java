@@ -60,13 +60,24 @@ public class UserBean implements Serializable {
 
     public void completeEnroll(Course course) throws InsufficientBalanceException, AlreadyExistsException {
         try {
-            for(Course c : LoginBean.getStudentLoggedIn().getUserCourses()){
-                if(course.equals(c)){throw new AlreadyExistsException("This course is already in your list of courses.");}
-            }
-            LoginBean.getStudentLoggedIn().enroll(course);
+            Course c = doesCourseExistInUserCourses(course);
+            LoginBean.getStudentLoggedIn().enroll(c);
         } catch (InsufficientBalanceException ex) {
             System.out.println(ex.getMessage());
+        } catch (AlreadyExistsException ex){
+            System.out.println(ex.getMessage());
         }
+    }
+    
+    
+    public Course doesCourseExistInUserCourses(Course course) throws AlreadyExistsException{
+        for (Course c : LoginBean.getStudentLoggedIn().getUserCourses()) {
+                if (course.equals(c)) {
+                throw new AlreadyExistsException("This course is already in your list of courses.");
+                }
+            }
+        return course;
+
     }
 
     protected static Student findStudentByUsername(String username) throws DoesNotExistException {

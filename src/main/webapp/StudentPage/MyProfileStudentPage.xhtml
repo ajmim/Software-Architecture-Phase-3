@@ -36,9 +36,9 @@
         <h2>Your transactions</h2>
         <h:form>
             <ui:repeat value="#{userBean.getStudentTransactions()}" var="item">
-                <h:outputText value="-----" />
-                <h:outputText value="#{item.toString()}" />
-                <h:outputText value="-----" />
+                <h:panelGrid columns="2">
+                    <h:outputText value="- #{item.toString()}" />
+                </h:panelGrid>
             </ui:repeat>
         </h:form>
         

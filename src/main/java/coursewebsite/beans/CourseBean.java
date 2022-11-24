@@ -3,6 +3,7 @@ package coursewebsite.beans;
 import coursewebsite.Database.Database;
 import coursewebsite.exceptions.DoesNotExistException;
 import coursewebsite.models.Course;
+import coursewebsite.models.Student;
 import coursewebsite.models.User;
 import java.util.ArrayList;
 import java.io.Serializable;
@@ -43,21 +44,25 @@ public class CourseBean implements Serializable {
         return LoginBean.getTeacherLoggedIn().getUserCourses();
     }
     
-    public boolean doesCourseExistInApp() {
+    public boolean doesCourseExistInApp() throws DoesNotExistException {
         for (Course f : Database.getInstance().getCourses()) {
             if (f.getTitle().equals(courseTitle)) {
                 return true;
             }
         }
-        return false;
+        throw new DoesNotExistException("Course " + courseTitle + " does not exist.");
     }
     
-    public void deleteACourse(Course c) throws DoesNotExistException{
-        if(c.getTeacher().equals(LoginBean.getTeacherLoggedIn())){
-            Database.getInstance().deleteCourse(c);
-        }else{
-            throw new DoesNotExistException("Course " + courseTitle + " does not exist.");
+    public void deleteACourse(String title) throws DoesNotExistException{
+        try{
+            courseTitle = title;
+            if(findCourseByTitle(title).getTeacher().equals(LoginBean.getTeacherLoggedIn())){
+                Database.getInstance().deleteCourse(findCourseByTitle(title));
+            }
+        }catch(DoesNotExistException ex) {
+            System.out.println(ex.getMessage());
         }
+        
     }
     
     public static Course findCourseByTitle(String t) throws DoesNotExistException{
@@ -68,10 +73,27 @@ public class CourseBean implements Serializable {
         }
         throw new DoesNotExistException("Course " + t + " does not exist.");
     }
+    
+    public Course searchCourse(){
+        Student s = LoginBean.getStudentLoggedIn();
+        try {
+            Course f = findCourseByTitle(courseTitle);
+            return f;
+        } catch (DoesNotExistException ex) {
+            System.out.println(ex.getMessage());
+        }
+        // empty values
+        this.courseTitle = "";
+        return null;
+    }
 
-    public void createACourse(){
-        if (!doesCourseExistInApp()){
-            Database.getInstance().addCourseInApp(new Course(courseTitle, LoginBean.getTeacherLoggedIn(), price));
+    public void createACourse() throws DoesNotExistException{
+        try{
+            if (!doesCourseExistInApp()){
+                Database.getInstance().addCourseInApp(new Course(courseTitle, LoginBean.getTeacherLoggedIn(), price));
+            }
+        }catch(DoesNotExistException ex) {
+            System.out.println(ex.getMessage());
         }
     }
     

@@ -15,12 +15,24 @@ and open the template in the editor.
     </h:head>
     <body>
         
+        
+        
+        
         <h:form>
             <h:outputText value="Courses in school" style="font-size: 30px"/>
             <br/>
             <h:outputText value="-----" />
             <br/>
+            
+            <h:form>
+                <h:outputText value="Search for a course "/>
+                <h:inputText value="#{courseBean.courseTitle}" />
 
+                <h:commandButton value="Search" action="/StudentPage/ResultSearchPage.xhtml?faces-redirect=true"/>
+            </h:form>
+            
+            
+            
             <h:form>       
                 <h:outputText value="Amount in the account: "/>
                 <h:outputText value="#{loginBean.currentStudent.balance}" />
@@ -29,22 +41,26 @@ and open the template in the editor.
             </h:form>
 
             <br/>            
-            <h:outputText value="Search for a course "/>
-            <h:inputText value="#{courseBean.courseTitle}" />
-            <h:commandButton value="Search" action="/StudentPage/ResultSearchPage.xhtml?faces-redirect=true"/>
+            
             <br/>            
-            <ui:repeat value="#{courseBean.getCourses()}" var="item">
-                <h:outputText value="-----" />
-                <h:panelGrid columns="2">
-                    <h:outputText value="Name:" />
-                    <h:outputText value="#{item.title}" />
-                    <h:outputText value="Price:" />
-                    <h:outputText value="#{item.price}" />
-                    <h:outputText value="Name teacher:" />
-                    <h:outputText value="#{item.teacher.firstName}" />
-                </h:panelGrid>
-                <h:outputText value="-----" />
-            </ui:repeat>
+            
+                
+                <p:dataTable var="c" value="#{courseBean.getCourses()}">
+                <p:column headerText="Title">
+                    <h:outputText value="#{c.title}" />
+                </p:column>
+                <p:column headerText="Teacher">
+                    <h:outputText value="#{c.teacher.getFirstName()}" />
+                </p:column>
+                <p:column headerText="Price">
+                    <h:outputText value="#{c.price}" />
+                </p:column>
+                <p:column headerText="Enroll">
+                    <h:commandButton value="Enroll" action="#{userBean.completeEnroll(courseBean.searchCourse())}"/>
+
+                </p:column>
+            </p:dataTable>
+
             <br/>
             <p:button outcome="StudentMainPage" value="Go back"/>
         </h:form>
