@@ -56,9 +56,8 @@ and open the template in the editor.
                     <h:outputText value="#{c.price}" />
                 </p:column>
                 <p:column headerText="Enroll">
-                    <h:commandButton value="Enroll" action="#{userBean.completeEnroll(courseBean.searchCourse())}"/>
+                    <h:commandButton value="Enroll" action="#{userBean.completeEnroll(c)}"/>
 
-                </p:column>
             </p:dataTable>
 
             <br/>

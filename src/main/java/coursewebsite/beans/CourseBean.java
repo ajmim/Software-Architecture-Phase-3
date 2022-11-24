@@ -4,6 +4,7 @@ import coursewebsite.Database.Database;
 import coursewebsite.exceptions.DoesNotExistException;
 import coursewebsite.models.Course;
 import coursewebsite.models.Student;
+import coursewebsite.models.Teacher;
 import coursewebsite.models.User;
 import java.util.ArrayList;
 import java.io.Serializable;
@@ -53,15 +54,14 @@ public class CourseBean implements Serializable {
         throw new DoesNotExistException("Course " + courseTitle + " does not exist.");
     }
     
-    public void deleteACourse(String title) throws DoesNotExistException{
-        try{
-            courseTitle = title;
-            if(findCourseByTitle(title).getTeacher().equals(LoginBean.getTeacherLoggedIn())){
-                Database.getInstance().deleteCourse(findCourseByTitle(title));
-            }
-        }catch(DoesNotExistException ex) {
-            System.out.println(ex.getMessage());
+    public void deleteACourse(String title){
+        Teacher t = LoginBean.getTeacherLoggedIn();
+        courseTitle = title;
+        if(searchCourse().getTeacher().equals(t)){
+            Database.getInstance().deleteCourse(searchCourse());
         }
+        courseTitle = "";
+
         
     }
     
@@ -78,12 +78,13 @@ public class CourseBean implements Serializable {
         Student s = LoginBean.getStudentLoggedIn();
         try {
             Course f = findCourseByTitle(courseTitle);
+            
             return f;
         } catch (DoesNotExistException ex) {
             System.out.println(ex.getMessage());
         }
         // empty values
-        this.courseTitle = "";
+        //this.courseTitle = "";
         return null;
     }
 

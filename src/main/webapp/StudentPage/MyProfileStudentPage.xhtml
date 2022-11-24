@@ -72,10 +72,27 @@
             </h:panelGrid>
         </h:form>
                
-        <h:form>
-            <p:button outcome="StudentMainPage" value="Back to Student Main page"/> 
-        </h:form>
         
-       
+        
+<br/>
+          
+        
+<h:form>
+    <p:growl id="growl" showDetail="true" />
+
+    <h:panelGrid columns="1" style="margin-bottom: 10px">
+        <p:inputText id="txt1" value="#{userBean.amount}" />
+        <p:slider for="txt1" />
+        <h:commandButton value="Deposit Money" action="#{userBean.increaseBalance()}"/>
+
+    </h:panelGrid>
+</h:form>
+
+
+<h:form>
+    <p:button outcome="StudentMainPage" value="Back to Student Main page"/> 
+</h:form>
+        
+        
     </body> 
 </html>
