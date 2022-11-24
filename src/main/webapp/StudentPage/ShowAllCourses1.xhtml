@@ -14,9 +14,25 @@ and open the template in the editor.
         <title>TeacherMainPage</title>
     </h:head>
     <body>
+        
         <h:form>
             <h:outputText value="Courses in school" style="font-size: 30px"/>
             <br/>
+            <h:outputText value="-----" />
+            <br/>
+
+            <h:form>       
+                <h:outputText value="Amount in the account: "/>
+                <h:outputText value="#{loginBean.currentStudent.balance}" />
+                <h:outputText value="-----" />
+               
+            </h:form>
+
+            <br/>            
+            <h:outputText value="Search for a course "/>
+            <h:inputText value="#{courseBean.courseTitle}" />
+            <h:commandButton value="Search" action="/StudentPage/ResultSearchPage.xhtml?faces-redirect=true"/>
+            <br/>            
             <ui:repeat value="#{courseBean.getCourses()}" var="item">
                 <h:outputText value="-----" />
                 <h:panelGrid columns="2">
@@ -32,6 +48,7 @@ and open the template in the editor.
             <br/>
             <p:button outcome="StudentMainPage" value="Go back"/>
         </h:form>
+        
         
     </body>
 
