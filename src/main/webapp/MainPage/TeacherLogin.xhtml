@@ -1,18 +1,14 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<!--
-To change this license header, choose License Headers in Project Properties.
-To change this template file, choose Tools | Templates
-and open the template in the editor.
--->
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:h="http://xmlns.jcp.org/jsf/html">
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui">
     <h:head>
-        <title>teacher login</title>
+        <title>Teacher Login</title>
     </h:head>
     <h:body>
+        <p:clock />
         <h:form>
-            <h:panelGrid columns="1">
+            <h:panelGrid columns="2">
                 <h:outputText value="Username"/>
                 <h:inputText value="#{loginBean.username}" />
                 <h:outputText value="Password"/>
@@ -20,10 +16,8 @@ and open the template in the editor.
                 <br/>
                 <h:commandButton value="Login" action="#{loginBean.teacherLogsIn()}"/>
                 <br/>
-                <h:commandButton value="Go Back to Main Menu" action="/MainPage.xhtml?faces-redirect=true"/>
-
+                <h:commandButton value="Go Back to Main Menu" action="MainPage.xhtml?faces-redirect=true"/>
             </h:panelGrid>
-        </h:form>
+        </h:form>            
     </h:body>
 </html>
-
