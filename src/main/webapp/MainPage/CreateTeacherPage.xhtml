@@ -17,20 +17,61 @@ and open the template in the editor.
         <h:form>
             <h:panelGrid columns="2">
                 <h:outputText value="Username"/>
-                <h:inputText value="#{userBean.username}" />
+                <h:inputText value="#{userBean.username}"
+                             style="height: 40px; width: 250px; text-align: center;
+                             font-size: 15px; font-family: Arial"/>
                 <h:outputText value="First Name"/>
-                <h:inputText value="#{userBean.firstName}" />
+                <h:inputText value="#{userBean.firstName}" 
+                             style="height: 40px; width: 250px; text-align: center;
+                             font-size: 15px; font-family: Arial"/>
                 <h:outputText value="Last Name"/>
-                <h:inputText value="#{userBean.lastName}" />
+                <h:inputText value="#{userBean.lastName}" 
+                             style="height: 40px; width: 250px; text-align: center;
+                             font-size: 15px; font-family: Arial"/>
                 <h:outputText value="Email"/>
-                <h:inputText value="#{userBean.email}" />
+                <h:inputText value="#{userBean.email}" 
+                             style="height: 40px; width: 250px; text-align: center;
+                             font-size: 15px; font-family: Arial"/>
                 <h:outputText value="Password"/>
-                <h:inputSecret value="#{userBean.password}" />
+                <h:inputSecret value="#{userBean.password}"
+                               style="height: 40px; width: 250px; text-align: center;
+                               font-size: 15px; font-family: Arial"/>
                 <br/>
-                <h:commandButton value="Create a User" action="#{userBean.createATeacher()}"/>
+                <h:commandButton value="Create a User" action="#{userBean.createATeacher()}"
+                                    style="background-image: linear-gradient(to right, #DD5E89 0%, #F7BB97  51%, #DD5E89  100%);
+                                    margin: 10px;
+                                    padding: 15px 45px;
+                                    text-align: center;
+                                    text-transform: uppercase;
+                                    transition: 0.5s;
+                                    background-size: 200% auto;
+                                    color: white;            
+                                    box-shadow: 0 0 20px #eee;
+                                    border-radius: 10px;
+                                    display: block;
+                                    background-position: right center; /* change the direction of the change here */
+                                    color: #fff;
+                                    text-decoration: none"/>
                 <br/>
-                <h:commandButton value="Go Back to Main Menu" action="MainPage.xhtml?faces-redirect=true"/>
+                <h:commandButton value="Go Back to Main Menu" action="MainPage.xhtml?faces-redirect=true"
+                                 style="background-image: linear-gradient(to right, #DD5E89 0%, #F7BB97  51%, #DD5E89  100%);
+                                    margin: 10px;
+                                    padding: 15px 45px;
+                                    text-align: center;
+                                    text-transform: uppercase;
+                                    transition: 0.5s;
+                                    background-size: 200% auto;
+                                    color: white;            
+                                    box-shadow: 0 0 20px #eee;
+                                    border-radius: 10px;
+                                    display: block;
+                                    background-position: right center; /* change the direction of the change here */
+                                    color: #fff;
+                                    text-decoration: none"/>
             </h:panelGrid>
         </h:form>
     </h:body>
 </html>
+
+
+
