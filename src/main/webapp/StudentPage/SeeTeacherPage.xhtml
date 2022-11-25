@@ -17,16 +17,29 @@ Revoir beauté
         <title>TeacherMainPage</title>
     </h:head>
     <body>
+        
         <h:form>
-            <h:outputText value="Teachers registered" style="font-size: 30px"/>
-            <br/>
-            <ui:repeat value="#{userBean.getAllTeachers()}" var="item">                
-                <h:panelGrid columns="2">
-                    <h:outputText value="Teacher: #{item.firstName}" />
-                </h:panelGrid>
-            </ui:repeat>
+            <br/>            
+            <br/>             
+                <p:dataTable var="c" value="#{userBean.getAllTeachers()}">
+                    <p:column headerText="Teacher">
+                        <h:outputText value="#{c.firstName}" />
+                    </p:column>
+                </p:dataTable>
+
             <br/>
             <p:button outcome="StudentMainPage" value="Go back"/>
         </h:form>
+        
+        
+        <h:form>
+        <p:fieldset legend="Simple Fieldset">
+            
+                <p:graphicImage value="/images/godfather/1.jpg" />
+                <h:outputText value="The story begins as Don Vito Corleone ..." />
+            
+        
+        
+        
     </body>
 </html>

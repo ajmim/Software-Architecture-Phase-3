@@ -27,6 +27,7 @@ public class Database {
 
         Course c1 = new Course("test 1", t3, 50);
         courses.add(c1);
+        t3.addUserCourse(c1);
         Course c2 = new Course("test 2", t3, 100);
         t3.addUserCourse(c2);
         courses.add(c2);
@@ -34,9 +35,16 @@ public class Database {
         t3.addUserCourse(c3);
         courses.add(c3);
         
-        courses.add(new Course("Python", t3, 50));
-        courses.add(new Course("Java", t2, 100));
-        courses.add(new Course("Math", t2, 500));      
+        Course c4 = new Course("Python", t3, 50);
+        t3.addUserCourse(c4);
+        Course c5 = new Course("Java", t2, 100);
+        t2.addUserCourse(c5);
+        Course c6 = new Course("Math", t2, 500);
+        t2.addUserCourse(c6);
+        
+        courses.add(c4);
+        courses.add(c5);
+        courses.add(c6);      
 
     }
 
