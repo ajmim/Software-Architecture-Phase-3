@@ -7,12 +7,12 @@
 -->
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml"
-    xmlns:h="http://java.sun.com/jsf/html"
-    xmlns:f="http://java.sun.com/jsf/core"
-    xmlns:p="http://primefaces.org/ui"
-    xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
 
-   <h:head>
+    <h:head>
         <title>StudentProfile</title>
         <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     </h:head>
@@ -59,58 +59,42 @@
 
         <h2>Your Balance</h2>
 
-        <h:form>
+        <!--<h:form>
             <h:panelGrid columns="2">
                 <h:outputText value="Amount in the account: "/>
                 <h:outputText value="#{loginBean.currentStudent.balance}" />
                 <h:outputText value="Amount to deposit: "/>
                 <h:inputText value="#{userBean.amount}" />
                 <br/>
-<!--
                 <h:commandButton value="Deposit Money" action="#{userBean.increaseBalance()}"/>
--->
-                <div class="card">
-
-                        <p:growl id="message" showDetail="true"/>
-
-                        <p:commandButton value="Deposit Money" action="#{userBean.increaseBalance()}" update="message" styleClass="mr-2" icon="pi pi-check">
-                            <p:confirm header="Confirmation" message="Are you sure you want to proceed?" icon="pi pi-exclamation-triangle"/>
-                        </p:commandButton>
-
-                        <p:confirmDialog global="true" showEffect="fade" hideEffect="fade" responsive="true" width="350">
-                            <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no ui-button-flat"/>
-                            <p:commandButton value="Yes" action="#{userBean.increaseBalance()}" type="button" styleClass="ui-confirmdialog-yes" />
-                        </p:confirmDialog>
-
-                </div>
-
-
                 <br/>
+            </h:panelGrid>
+        </h:form> -->
+
+
+
+        <br/>
+
+
+        <h:form>
+            <p:growl id="growl" showDetail="true" />
+
+            <h:panelGrid columns="1" style="margin-bottom: 10px">
+                <h:outputText value="Amount in the account: "/>
+                <h:outputText value="#{loginBean.currentStudent.balance}" />
+                <p:inputText id="txt1" value="#{userBean.amount}" />
+                <p:slider for="txt1" minValue="1" maxValue="2000"/>
+                <h:commandButton value="Deposit Money" action="#{userBean.increaseBalance()}"/>
+
             </h:panelGrid>
         </h:form>
 
+
         <h:form>
-            <p:button outcome="StudentMainPage" value="Back to Student Main page"/>
+            <p:button outcome="StudentMainPage" value="Back to Student Main page"/> 
         </h:form>
 
 
-    </body>
+    </body> 
 </html>
-
-<div class="card">
-<h:form>
-    <p:growl id="message" showDetail="true"/>
-
-    <p:commandButton value="Deposit Money" action="#{userBean.increaseBalance()}" update="message" styleClass="mr-2" icon="pi pi-check">
-        <p:confirm header="Confirmation" message="Are you sure you want to proceed?" icon="pi pi-exclamation-triangle"/>
-    </p:commandButton>
-
-
-
-    <p:confirmDialog global="true" showEffect="fade" hideEffect="fade" responsive="true" width="350">
-        <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no ui-button-flat"/>
-        <p:commandButton value="Yes" type="button" styleClass="ui-confirmdialog-yes" />
-    </p:confirmDialog>
-</h:form>
-</div>
 

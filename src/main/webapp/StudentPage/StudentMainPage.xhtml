@@ -32,7 +32,14 @@
             <p:button outcome="ShowAllCourses1" value="Show all courses"/>
         </h:form>
         <h:form>
-            <p:button outcome="/MainPage/MainPage" value="LogOff"/>
+        <p:growl id="messages" />
+        <p:commandButton value="LogOff" action="#{loginBean.userLogsout()}" update="messages">
+            <p:confirm header="Confirmation" message="Sure?" icon="ui-icon-alert"/>
+        </p:commandButton>
+        <p:confirmDialog global="true">
+            <p:commandButton value="Yes" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check"/>
+            <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close"/>
+        </p:confirmDialog>
         </h:form>
 
         
