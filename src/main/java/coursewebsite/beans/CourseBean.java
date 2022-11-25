@@ -1,6 +1,7 @@
 package coursewebsite.beans;
 
 import coursewebsite.Database.Database;
+import coursewebsite.exceptions.AlreadyExistsException;
 import coursewebsite.exceptions.DoesNotExistException;
 import coursewebsite.models.Course;
 import coursewebsite.models.Student;
@@ -8,6 +9,8 @@ import coursewebsite.models.Teacher;
 import coursewebsite.models.User;
 import java.util.ArrayList;
 import java.io.Serializable;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.enterprise.context.SessionScoped;
 import javax.inject.Named;
 
@@ -46,12 +49,23 @@ public class CourseBean implements Serializable {
     }
     
     public boolean doesCourseExistInApp() throws DoesNotExistException {
+        
         for (Course f : Database.getInstance().getCourses()) {
             if (f.getTitle().equals(courseTitle)) {
                 return true;
             }
         }
         throw new DoesNotExistException("Course " + courseTitle + " does not exist.");
+    }
+    
+    public boolean sameCourseTitle() throws AlreadyExistsException {
+        for (Course f : Database.getInstance().getCourses()) {
+            if (f.getTitle().equals(courseTitle)) {
+                throw new AlreadyExistsException("Course " + courseTitle + " exists already.");
+            }
+        }
+        return false;
+        
     }
     
     public void deleteACourse(String title){
@@ -84,18 +98,25 @@ public class CourseBean implements Serializable {
             System.out.println(ex.getMessage());
         }
         // empty values
-        //this.courseTitle = "";
+        this.courseTitle = "";
         return null;
+    
     }
 
-    public void createACourse() throws DoesNotExistException{
-        try{
-            if (!doesCourseExistInApp()){
+    public void createACourse() {
+        try {
+            if(!sameCourseTitle()){
+                Course c = new Course(courseTitle, LoginBean.getTeacherLoggedIn(), price);
                 Database.getInstance().addCourseInApp(new Course(courseTitle, LoginBean.getTeacherLoggedIn(), price));
+                LoginBean.getTeacherLoggedIn().addUserCourse(c);
             }
-        }catch(DoesNotExistException ex) {
+        } catch (AlreadyExistsException ex) {
             System.out.println(ex.getMessage());
         }
+        
+        
+
+
     }
     
     public double getPrice(){

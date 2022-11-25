@@ -60,6 +60,7 @@ public class UserBean implements Serializable {
 
     public void completeEnroll(Course course) throws InsufficientBalanceException, AlreadyExistsException {
         try {
+            System.out.print("test here");
             Course c = doesCourseExistInUserCourses(course);
             LoginBean.getStudentLoggedIn().enroll(c);
         } catch (InsufficientBalanceException ex) {

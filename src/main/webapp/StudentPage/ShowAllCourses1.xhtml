@@ -11,7 +11,7 @@ and open the template in the editor.
       xmlns:p="http://primefaces.org/ui">
       
     <h:head>
-        <title>TeacherMainPage</title>
+        <title>App Courses</title>
     </h:head>
     <body>
         
@@ -50,14 +50,14 @@ and open the template in the editor.
                     <h:outputText value="#{c.title}" />
                 </p:column>
                 <p:column headerText="Teacher">
-                    <h:outputText value="#{c.teacher.getFirstName()}" />
+                    <h:outputText value="#{c.teacher.firstName}" />
                 </p:column>
                 <p:column headerText="Price">
                     <h:outputText value="#{c.price}" />
                 </p:column>
                 <p:column headerText="Enroll">
                     <h:commandButton value="Enroll" action="#{userBean.completeEnroll(c)}"/>
-
+                </p:column>
             </p:dataTable>
 
             <br/>
