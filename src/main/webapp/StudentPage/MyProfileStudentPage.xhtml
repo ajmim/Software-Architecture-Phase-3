@@ -11,7 +11,7 @@
     xmlns:f="http://java.sun.com/jsf/core"
     xmlns:p="http://primefaces.org/ui"
     xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
-    
+
    <h:head>
         <title>StudentProfile</title>
         <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
@@ -32,32 +32,31 @@
                 <br/>
             </h:panelGrid>
         </h:form>
-        
+
         <h2>Your transactions</h2>
         <h:form>
-            <ui:repeat value="#{userBean.getStudentTransactions()}" var="item">
-                <h:panelGrid columns="2">
-                    <h:outputText value="- #{item.toString()}" />
-                </h:panelGrid>
-            </ui:repeat>
+            <p:dataTable var="t" value="#{userBean.getStudentTransactions()}">
+                <p:column headerText="Teacher">
+                    <h:outputText value="#{t.toString()}" />
+                </p:column>
+            </p:dataTable>
         </h:form>
-        
+
+
         <h2>Your Courses</h2>
 
-        
+
         <h:form>
-            <ui:repeat value="#{loginBean.getStudentLoggedIn().getUserCourses()}" var="item">
-                <h:outputText value="-----" />
-                <h:panelGrid columns="2">
-                    <h:outputText value="Title" />
-                    <h:outputText value="#{item.title}" />
-                    <h:outputText value="Teacher:" />
-                    <h:outputText value="#{item.teacher.firstName}" />
-                </h:panelGrid>
-                <h:outputText value="-----" />
-            </ui:repeat>
+            <p:dataTable var="co" value="#{loginBean.getStudentLoggedIn().getUserCourses()}">
+                <p:column headerText="Title">
+                    <h:outputText value="#{co.title}" />
+                </p:column>
+                <p:column headerText="Teacher">
+                    <h:outputText value="#{co.teacher.FirstName()}" />
+                </p:column>
+            </p:dataTable>
         </h:form>
-        
+
         <h2>Your Balance</h2>
 
         <h:form>
@@ -67,32 +66,51 @@
                 <h:outputText value="Amount to deposit: "/>
                 <h:inputText value="#{userBean.amount}" />
                 <br/>
+<!--
                 <h:commandButton value="Deposit Money" action="#{userBean.increaseBalance()}"/>
+-->
+                <div class="card">
+
+                        <p:growl id="message" showDetail="true"/>
+
+                        <p:commandButton value="Deposit Money" action="#{userBean.increaseBalance()}" update="message" styleClass="mr-2" icon="pi pi-check">
+                            <p:confirm header="Confirmation" message="Are you sure you want to proceed?" icon="pi pi-exclamation-triangle"/>
+                        </p:commandButton>
+
+                        <p:confirmDialog global="true" showEffect="fade" hideEffect="fade" responsive="true" width="350">
+                            <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no ui-button-flat"/>
+                            <p:commandButton value="Yes" action="#{userBean.increaseBalance()}" type="button" styleClass="ui-confirmdialog-yes" />
+                        </p:confirmDialog>
+
+                </div>
+
+
                 <br/>
             </h:panelGrid>
         </h:form>
-               
-        
-        
-<br/>
-          
-        
-<h:form>
-    <p:growl id="growl" showDetail="true" />
 
-    <h:panelGrid columns="1" style="margin-bottom: 10px">
-        <p:inputText id="txt1" value="#{userBean.amount}" />
-        <p:slider for="txt1" />
-        <h:commandButton value="Deposit Money" action="#{userBean.increaseBalance()}"/>
-
-    </h:panelGrid>
-</h:form>
+        <h:form>
+            <p:button outcome="StudentMainPage" value="Back to Student Main page"/>
+        </h:form>
 
 
-<h:form>
-    <p:button outcome="StudentMainPage" value="Back to Student Main page"/> 
-</h:form>
-        
-        
-    </body> 
+    </body>
 </html>
+
+<div class="card">
+<h:form>
+    <p:growl id="message" showDetail="true"/>
+
+    <p:commandButton value="Deposit Money" action="#{userBean.increaseBalance()}" update="message" styleClass="mr-2" icon="pi pi-check">
+        <p:confirm header="Confirmation" message="Are you sure you want to proceed?" icon="pi pi-exclamation-triangle"/>
+    </p:commandButton>
+
+
+
+    <p:confirmDialog global="true" showEffect="fade" hideEffect="fade" responsive="true" width="350">
+        <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no ui-button-flat"/>
+        <p:commandButton value="Yes" type="button" styleClass="ui-confirmdialog-yes" />
+    </p:confirmDialog>
+</h:form>
+</div>
+
