@@ -29,10 +29,13 @@ public class Database {
         //courses = new ArrayList<Course>();
         Course c1 = new Course("Python", t3, 50);
         t3.addUserCourse(c1);
+        courses.add(c1);
         Course c2 = new Course("Java", t2, 100);
         t2.addUserCourse(c2);
+        courses.add(c2);
         Course c3 = new Course("Math", t2, 500);
         t2.addUserCourse(c3);
+        courses.add(c3);
 
     }
 
