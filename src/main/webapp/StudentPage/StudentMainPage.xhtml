@@ -10,7 +10,8 @@
 <html xmlns:p="http://primefaces.org/ui"
     xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
-      xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
     
    <h:head>
         <title>StudentMain</title>
@@ -20,17 +21,34 @@
         <h1>StudentMain</h1>
 
         <h:form>
+            
+            <div class="card">
+                <h5 class="mt-0"> </h5>
+                <p:tabMenu activeIndex="#{param.i}">
+                    <p:menuitem value="My Profile" outcome="MyProfileStudentPage" icon="pi pi-fw pi-user">
+                        <f:param name="i" value="0"/>
+                    </p:menuitem>
+                    <p:menuitem value="Show Teachers" outcome="SeeTeacherPage" icon="pi pi-fw pi-user">
+                        <f:param name="i" value="1"/>
+                    </p:menuitem>
+                    <p:menuitem value="Show all courses" outcome="ShowAllCourses1" icon="pi pi-fw pi-user-edit">
+                        <f:param name="i" value="2"/>
+                    </p:menuitem>
+                </p:tabMenu>
+            </div>
+
+        </h:form>
+        <br/>
+        <br/>
+        
+        <h:form>
             <h:outputText value="Search for a course "/>
             <h:inputText value="#{courseBean.courseTitle}" />
 
             <h:commandButton value="Search" action="/StudentPage/ResultSearchPage.xhtml?faces-redirect=true"/>
         </h:form>
-        
-        <h:form>
-            <p:button outcome="MyProfileStudentPage" value="My Profile"/>
-            <p:button outcome="SeeTeacherPage" value="Show Teachers"/> 
-            <p:button outcome="ShowAllCourses1" value="Show all courses"/>
-        </h:form>
+        <br/>
+        <br/>
         <h:form>
         <p:growl id="messages" />
         <p:commandButton value="LogOff" action="#{loginBean.userLogsout()}" update="messages">
