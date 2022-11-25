@@ -14,9 +14,10 @@ and open the template in the editor.
         <title>Courses</title>
     </h:head>
     <body>
-        
+        <br/>
+        <h1>Courses available on our website</h1>
        
-            <br/>
+        
 
         <h:form>
             <p:dataTable var="c" value="#{courseBean.getCourses()}">
@@ -30,6 +31,17 @@ and open the template in the editor.
                     <h:outputText value="#{c.price}" />
                 </p:column>
             </p:dataTable>
+            
+            <br/>
+            <h:commandButton value="Go Back to Main Menu" action="MainPage.xhtml?faces-redirect=true"
+                             style="background-color: #24a0ed;
+                                border: none;
+                                color: white;
+                                padding: 15px 32px;
+                                text-align: center;
+                                text-decoration: none;
+                                display: inline-block;
+                                font-size: 16px"/>
         </h:form>
         
         
