@@ -25,14 +25,17 @@
             <div class="card">
                 <h5 class="mt-0"> </h5>
                 <p:tabMenu activeIndex="#{param.i}">
-                    <p:menuitem value="My Profile" outcome="MyProfileStudentPage" icon="pi pi-fw pi-user">
+                    <p:menuitem value="StudentMain" outcome="StudentMainPage" icon="pi pi-fw pi-user-edit">
                         <f:param name="i" value="0"/>
                     </p:menuitem>
-                    <p:menuitem value="Show Teachers" outcome="SeeTeacherPage" icon="pi pi-fw pi-user">
+                    <p:menuitem value="My Profile" outcome="MyProfileStudentPage" icon="pi pi-fw pi-user">
                         <f:param name="i" value="1"/>
                     </p:menuitem>
-                    <p:menuitem value="Show all courses" outcome="ShowAllCourses1" icon="pi pi-fw pi-user-edit">
+                    <p:menuitem value="Show Teachers" outcome="SeeTeacherPage" icon="pi pi-fw pi-user">
                         <f:param name="i" value="2"/>
+                    </p:menuitem>
+                    <p:menuitem value="Show all courses" outcome="ShowAllCourses1" icon="pi pi-fw pi-user-edit">
+                        <f:param name="i" value="3"/>
                     </p:menuitem>
                 </p:tabMenu>
             </div>

@@ -18,6 +18,28 @@
     </h:head>
     <body>
         <h1>Your Profile</h1>
+        <h:form>
+            
+            <div class="card">
+                <h5 class="mt-0"> </h5>
+                <p:tabMenu activeIndex="#{param.i}">
+                    <p:menuitem value="StudentMain" outcome="StudentMainPage" icon="pi pi-fw pi-user-edit">
+                        <f:param name="i" value="0"/>
+                    </p:menuitem>
+                    <p:menuitem value="My Profile" outcome="MyProfileStudentPage" icon="pi pi-fw pi-user">
+                        <f:param name="i" value="1"/>
+                    </p:menuitem>
+                    <p:menuitem value="Show Teachers" outcome="SeeTeacherPage" icon="pi pi-fw pi-user">
+                        <f:param name="i" value="2"/>
+                    </p:menuitem>
+                    <p:menuitem value="Show all courses" outcome="ShowAllCourses1" icon="pi pi-fw pi-user-edit">
+                        <f:param name="i" value="3"/>
+                    </p:menuitem>
+                </p:tabMenu>
+            </div>
+
+        </h:form>
+        
         <h2>Your info</h2>
         <h:form>
             <h:panelGrid columns="2">
@@ -52,25 +74,12 @@
                     <h:outputText value="#{co.title}" />
                 </p:column>
                 <p:column headerText="Teacher">
-                    <h:outputText value="#{co.teacher.FirstName()}" />
+                    <h:outputText value="#{co.teacher.firstName}" />
                 </p:column>
             </p:dataTable>
         </h:form>
 
         <h2>Your Balance</h2>
-
-        <!--<h:form>
-            <h:panelGrid columns="2">
-                <h:outputText value="Amount in the account: "/>
-                <h:outputText value="#{loginBean.currentStudent.balance}" />
-                <h:outputText value="Amount to deposit: "/>
-                <h:inputText value="#{userBean.amount}" />
-                <br/>
-                <h:commandButton value="Deposit Money" action="#{userBean.increaseBalance()}"/>
-                <br/>
-            </h:panelGrid>
-        </h:form> -->
-
 
 
         <br/>
