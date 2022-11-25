@@ -17,6 +17,12 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     </h:head>
     <body>
+        <style>
+            body{
+                background-image: url("https://img.freepik.com/free-photo/beautiful-arrangement-different-books_23-2148883798.jpg?w=2000");
+                font-family: Arial, Helvetica, sans-serif;
+            }
+        </style>
         <h1>Your Profile</h1>
         <h:form>
             
@@ -58,7 +64,7 @@
         <h2>Your transactions</h2>
         <h:form>
             <p:dataTable var="t" value="#{userBean.getStudentTransactions()}">
-                <p:column headerText="Teacher">
+                <p:column headerText="Transaction">
                     <h:outputText value="#{t.toString()}" />
                 </p:column>
             </p:dataTable>
@@ -82,7 +88,7 @@
         <h2>Your Balance</h2>
 
 
-        <br/>
+        
 
 
         <h:form>
@@ -91,14 +97,27 @@
             <h:panelGrid columns="1" style="margin-bottom: 10px">
                 <h:outputText value="Amount in the account: "/>
                 <h:outputText value="#{loginBean.currentStudent.balance}" />
+                <br/>
+                
                 <p:inputText id="txt1" value="#{userBean.amount}" />
                 <p:slider for="txt1" minValue="1" maxValue="2000"/>
-                <h:commandButton value="Deposit Money" action="#{userBean.increaseBalance()}"/>
+                <br/>
+                <h:commandButton value="Deposit Money" action="#{userBean.increaseBalance()}"
+                                 style="background-color: #24a0ed;
+                                border: none;
+                                color: white;
+                                padding: 15px 32px;
+                                text-align: center;
+                                text-decoration: none;
+                                display: inline-block;
+                                font-size: 16px"/>
+
 
             </h:panelGrid>
         </h:form>
 
-
+<br/>
+<br/>
         <h:form>
             <p:button outcome="StudentMainPage" value="Back to Student Main page"/> 
         </h:form>

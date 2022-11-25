@@ -6,10 +6,16 @@
     xmlns:p="http://primefaces.org/ui"
     xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
     <h:head>
-        <title>Find a course</title>
+        <title>Find and enroll in a course</title>
         <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     </h:head>
     <body>
+        <style>
+            body{
+                background-image: url("https://img.freepik.com/free-photo/beautiful-arrangement-different-books_23-2148883798.jpg?w=2000");
+                font-family: Arial, Helvetica, sans-serif;
+            }
+        </style>
         <h:form>
 
             <div class="card">
@@ -45,13 +51,24 @@
                     <h:outputText value="#{c.price}" />
                 </p:column>
                 <p:column headerText="Enroll">
-                    <h:commandButton value="Enroll" action="#{userBean.completeEnroll(courseBean.searchCourse())}"/>
+                    <h:commandButton value="Enroll" action="#{userBean.completeEnroll(courseBean.searchCourse())}"
+                                     style="background-color: grey;
+                                border: none;
+                                color: white;
+                                padding: 8px 8px;
+                                text-align: center;
+                                text-decoration: none;
+                                display: inline-block;
+                                border-radius: 10px;
+                                font-size: 16px"/>
 
                 </p:column>
             </p:dataTable>
         </h:form>
 
         <h:form>
+            <br/>
+            <br/>
             <p:button outcome="StudentMainPage" value="Back to Student Main page"/> 
 
         </h:form>

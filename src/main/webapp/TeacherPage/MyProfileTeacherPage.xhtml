@@ -1,10 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!--
-- infos sur user
-- See transactions
-- voir enrolled courses
-- deposit money
--->
+
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml"
     xmlns:h="http://java.sun.com/jsf/html"
@@ -17,6 +12,12 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     </h:head>
     <body>
+        <style>
+            body{
+                background-image: url("https://img.freepik.com/free-photo/beautiful-arrangement-different-books_23-2148883798.jpg?w=2000");
+                font-family: Arial, Helvetica, sans-serif;
+            }
+        </style>
         <h1>Your Profile</h1>
         <h2>Your info</h2>
         <h:form>
@@ -37,34 +38,32 @@
         
         <h2>Your transactions</h2>
         <h:form>
-            <ui:repeat value="#{userBean.getTeacherTransactions()}" var="item">
-                <h:outputText value="-----" />
-                <h:outputText value="#{item.toString()}" />
-                <h:outputText value="-----" />
-            </ui:repeat>
+            <p:dataTable var="t" value="#{userBean.getTeacherTransactions()}">
+            <p:column headerText="Transaction">
+                <h:outputText value="#{t.toString()}" />
+            </p:column>
+        </p:dataTable>
         </h:form>
         
         <h2>Your Courses</h2>
-
         <h:form>
-            <ui:repeat value="#{loginBean.getTeacherLoggedIn().getUserCourses()}" var="item">
-                <h:outputText value="-----" />
-                <h:panelGrid columns="2">
-                    <h:outputText value="Title" />
-                    <h:outputText value="#{item.title}" />
-                    <h:outputText value="Teacher:" />
-                    <h:outputText value="#{item.teacher.firstName}" />
-                </h:panelGrid>
-                <h:outputText value="-----" />
-            </ui:repeat>
+            <p:dataTable var="co" value="#{loginBean.getTeacherLoggedIn().getUserCourses()}">
+                <p:column headerText="Title">
+                    <h:outputText value="#{co.title}" />
+                </p:column>
+                <p:column headerText="Price">
+                    <h:outputText value="#{co.price}" />
+                </p:column>
+            </p:dataTable>
         </h:form>
         
         
-        
+                    <br/>
+            <br/>
+
         
         <h:form>
             <p:button outcome="TeacherMainPage" value="Back to Teacher Main page"/> 
-
         </h:form>
         
     

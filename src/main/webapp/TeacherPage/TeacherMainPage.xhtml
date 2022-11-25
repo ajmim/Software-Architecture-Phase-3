@@ -1,49 +1,98 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!--
-- bouton profile
-- see all teachers
-- see all courses in the plateforme
-- 
 
--->
 <!DOCTYPE html>
 <html xmlns:p="http://primefaces.org/ui"
     xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
-      xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
     
    <h:head>
         <title>TeacherMain</title>
         <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     </h:head>
     <body>
+       <style>
+            body{
+                background-image: url("https://img.freepik.com/free-photo/beautiful-arrangement-different-books_23-2148883798.jpg?w=2000");
+                font-family: Arial, Helvetica, sans-serif;
+            }
+        </style>
+        <center>
         <h1>Teacher Main Page</h1>
+               </center>
+
         
+        <h:form>
+            
+            <div class="card">
+                <h5 class="mt-0"> </h5>
+                <p:tabMenu activeIndex="#{param.i}">
+                    <p:menuitem value="Teacher Main" outcome="TeacherMainPage" icon="pi pi-fw pi-user-edit">
+                        <f:param name="i" value="0"/>
+                    </p:menuitem>
+                    <p:menuitem value="My Profile" outcome="MyProfileTeacherPage" icon="pi pi-fw pi-user">
+                        <f:param name="i" value="1"/>
+                    </p:menuitem>
+
+                </p:tabMenu>
+            </div>
+
+        </h:form>
+        <br/>
+        <!-- __________________________________________________________________ -->
          <h:form>
+             
             <h2>Create a course</h2>
             <h:panelGrid columns="2">
-                <h:outputText value="Course Title"/>
-                <h:inputText value="#{courseBean.courseTitle}" />
+                <h:outputText value="Course Title" />
+                <br/>
+                <h:inputText value="#{courseBean.courseTitle}" style="height: 40px; width: 190px; text-align: left;
+                             font-size: 15px; font-family: Arial" />
+                <br/>
                 <h:outputText value="Set the price"/>
-                <h:inputText value="#{courseBean.price}" />
-                <h:commandButton value="Create the course" action="#{courseBean.createACourse()}"/>
+                <br/>
+                <h:inputText value="#{courseBean.price}" style="height: 40px; width: 190px; text-align: left;
+                             font-size: 15px; font-family: Arial" />
+                <br/>
+                <h:commandButton value="Create the course" action="#{courseBean.createACourse()}"
+                                 style="background-color: #24a0ed;
+                                border: none;
+                                color: white;
+                                padding: 15px 32px;
+                                text-align: center;
+                                text-decoration: none;
+                                display: inline-block;
+                                font-size: 16px"/>
             </h:panelGrid>
         </h:form>
-        
+        <br/>
+        <br/>
+        <br/>
+        <!-- __________________________________________________________________ -->
         <h:form>
             <h2>Delete a course</h2>
             <h:outputText value="Delete a course"/>
-            <h:inputText value="#{courseBean.courseTitle}" />
-            <h:commandButton value="Delete" action="#{courseBean.deleteACourse()}"/>
+            <br/>
+            <h:inputText value="#{courseBean.courseTitle}"
+                         style="height: 40px; width: 190px; text-align: left;
+                             font-size: 15px; font-family: Arial"/>
+            <br/>
+           
+            <h:commandButton value="Delete" action="#{courseBean.deleteACourse()}"
+                              style="background-color: #24a0ed;
+                                border: none;
+                                color: white;
+                                padding: 15px 32px;
+                                text-align: center;
+                                text-decoration: none;
+                                display: inline-block;
+                                font-size: 16px"/>
         </h:form>
+          <br/>
+          <br/>
         
-        
-        <h:form>
-            <p:button outcome="MyProfileTeacherPage" value="My Profile"/>
-        </h:form>
-        
-        <br/>
-        
+          <!-- ________________________________________________________________ -->
         <h:form>
         <p:growl id="messages" />
         <p:commandButton value="LogOff" action="#{loginBean.userLogsout()}" update="messages">
@@ -53,8 +102,9 @@
             <p:commandButton value="Yes" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check"/>
             <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close"/>
         </p:confirmDialog>
+       
         </h:form>
-
+          
         
     </body> 
 </html>

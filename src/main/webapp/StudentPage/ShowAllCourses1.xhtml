@@ -1,9 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!--
-To change this license header, choose License Headers in Project Properties.
-To change this template file, choose Tools | Templates
-and open the template in the editor.
--->
+
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
@@ -15,6 +11,13 @@ and open the template in the editor.
         <title>App Courses</title>
     </h:head>
     <body>
+        <style>
+            body{
+                background-image: url("https://img.freepik.com/free-photo/beautiful-arrangement-different-books_23-2148883798.jpg?w=2000");
+                font-family: Arial, Helvetica, sans-serif;
+            }
+        </style>
+        <h1>Courses available</h1>
         
         <h:form>
             
@@ -40,16 +43,27 @@ and open the template in the editor.
         
         
         <h:form>
-            <h:outputText value="Courses in school" style="font-size: 30px"/>
-            <br/>
-            <h:outputText value="-----" />
+            
+            
             <br/>
             
             <h:form>
                 <h:outputText value="Search for a course "/>
+                <br/>
                 <h:inputText value="#{courseBean.courseTitle}" />
-
-                <h:commandButton value="Search" action="/StudentPage/ResultSearchPage.xhtml?faces-redirect=true"/>
+<br/>
+<br/>
+                <h:commandButton value="Search" action="/StudentPage/ResultSearchPage.xhtml?faces-redirect=true"
+                                 style="background-color: #24a0ed;
+                                border: none;
+                                color: white;
+                                padding: 15px 15px;
+                                text-align: center;
+                                text-decoration: none;
+                                display: inline-block;
+                                font-size: 16px"/>
+                <br/>
+                <br/>
             </h:form>
             
             
@@ -57,7 +71,7 @@ and open the template in the editor.
             <h:form>       
                 <h:outputText value="Amount in the account: "/>
                 <h:outputText value="#{loginBean.currentStudent.balance}" />
-                <h:outputText value="-----" />
+                <h:outputText value=".-" />
                
             </h:form>
 
