@@ -68,15 +68,13 @@ public class CourseBean implements Serializable {
         
     }
     
-    public void deleteACourse(String title){
+    public void deleteACourse(){
         Teacher t = LoginBean.getTeacherLoggedIn();
-        courseTitle = title;
         if(searchCourse().getTeacher().equals(t)){
-            Database.getInstance().deleteCourse(searchCourse());
+            t.deleteUserCourse(searchTeacherCourse());
+            Database.getInstance().deleteCourse(searchTeacherCourse());
         }
         courseTitle = "";
-
-        
     }
     
     public static Course findCourseByTitle(String t) throws DoesNotExistException{
@@ -102,6 +100,21 @@ public class CourseBean implements Serializable {
         return null;
     
     }
+    
+    public Course searchTeacherCourse(){
+        Teacher t = LoginBean.getTeacherLoggedIn();
+        try {
+            Course f = findCourseByTitle(courseTitle);
+            
+            return f;
+        } catch (DoesNotExistException ex) {
+            System.out.println(ex.getMessage());
+        }
+        // empty values
+        this.courseTitle = "";
+        return null;
+    
+    }
 
     public void createACourse() {
         try {
@@ -112,10 +125,7 @@ public class CourseBean implements Serializable {
             }
         } catch (AlreadyExistsException ex) {
             System.out.println(ex.getMessage());
-        }
-        
-        
-
+        }     
 
     }
     

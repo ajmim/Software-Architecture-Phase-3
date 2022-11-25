@@ -19,14 +19,12 @@ public class Database {
         students.add(new Student("s1", "mohamed","student d1", "s1@", "123"));
         students.add(new Student("s2", "Ismael","student 2", "s2@", "123"));
 
-        //teachers = new ArrayList<Teacher>();
         teachers.add(new Teacher("t1", "Vlachos","teacher 1", "t1@", "123"));
         Teacher t2 = new Teacher("t2", "Estier","teacher 2", "t2@", "123");
         teachers.add(t2);
         Teacher t3 = new Teacher("t3", "Dupont", "teacher 3", "t3@", "123");
         teachers.add(t3);
 
-        //courses = new ArrayList<Course>();
         Course c1 = new Course("test 1", t3, 50);
         courses.add(c1);
         Course c2 = new Course("test 2", t3, 100);

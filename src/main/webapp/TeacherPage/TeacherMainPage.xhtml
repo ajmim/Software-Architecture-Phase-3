@@ -34,7 +34,7 @@
             <h2>Delete a course</h2>
             <h:outputText value="Delete a course"/>
             <h:inputText value="#{courseBean.courseTitle}" />
-            <h:commandButton value="Delete" action="#{courseBean.deleteACourse(courseBean.findCourseByTitle(courseBean.courseTitle))}"/>
+            <h:commandButton value="Delete" action="#{courseBean.deleteACourse()}"/>
         </h:form>
         
         

@@ -47,6 +47,10 @@ public class User{
     }
 
     public void addUserCourse(Course course) { this.userCourses.add(course); }
+    
+    public void deleteUserCourse(Course course){
+        this.userCourses.remove(course);
+    }
 
     public void setUsername(String username) {
         this.username = username;
