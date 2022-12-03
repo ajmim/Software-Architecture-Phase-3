@@ -8,6 +8,8 @@ import javax.inject.Named;
 import javax.enterprise.context.SessionScoped;
 import java.io.Serializable;
 import javax.faces.context.ExternalContext;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 /**
  *
  * @author IsmaTew
@@ -15,7 +17,7 @@ import javax.faces.context.ExternalContext;
 @Named(value = "loginBean")
 @SessionScoped
 public class LoginBean implements Serializable {
-
+    
     private String username = "";
     private String password = "";
     private static Student currentStudent;

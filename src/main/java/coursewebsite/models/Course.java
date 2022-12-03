@@ -1,98 +1,128 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
 package coursewebsite.models;
 
-import coursewebsite.Database.Database;
+import java.io.Serializable;
+import javax.persistence.Basic;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
+import javax.persistence.Table;
+import javax.validation.constraints.Size;
+import javax.xml.bind.annotation.XmlRootElement;
 
-import java.util.ArrayList;
-import java.util.Objects;
+/**
+ *
+ * @author moham
+ */
+@Entity
+@Table(name = "course")
+@XmlRootElement
+@NamedQueries({
+    @NamedQuery(name = "Course.findAll", query = "SELECT c FROM Course c"),
+    @NamedQuery(name = "Course.findByCourseId", query = "SELECT c FROM Course c WHERE c.courseId = :courseId"),
+    @NamedQuery(name = "Course.findByTitle", query = "SELECT c FROM Course c WHERE c.title = :title"),
+    @NamedQuery(name = "Course.findByTeacher", query = "SELECT c FROM Course c WHERE c.teacher = :teacher"),
+    @NamedQuery(name = "Course.findByPrice", query = "SELECT c FROM Course c WHERE c.price = :price"),
+    @NamedQuery(name = "Course.findByUnrolledStudent", query = "SELECT c FROM Course c WHERE c.unrolledStudent = :unrolledStudent")})
+public class Course implements Serializable {
 
-public class Course {
-
+    private static final long serialVersionUID = 1L;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Basic(optional = false)
+    @Column(name = "COURSE_ID")
+    private Integer courseId;
+    @Size(max = 100)
+    @Column(name = "TITLE")
     private String title;
-    private Teacher teacher;
-    private double price;
-    private final ArrayList<Student> enrolled_students = new ArrayList<>();
-    private final ArrayList<Review> reviewList = new ArrayList<>();
+    @Size(max = 100)
+    @Column(name = "TEACHER")
+    private String teacher;
+    // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
+    @Column(name = "PRICE")
+    private Double price;
+    @Size(max = 10000)
+    @Column(name = "UNROLLED_STUDENT")
+    private String unrolledStudent;
 
-    public Course(String title, Teacher teacher, double price) {
-        this.title = title;
-        this.teacher = teacher;
-        this.price = price;
+    public Course() {
     }
 
-    public ArrayList<Review> getReviewList() { return this.reviewList; }
-
-    public void addReview(Review review) {
-        this.reviewList.add(review);
-
+    public Course(Integer courseId) {
+        this.courseId = courseId;
     }
+
+    public Integer getCourseId() {
+        return courseId;
+    }
+
+    public void setCourseId(Integer courseId) {
+        this.courseId = courseId;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
     public void setTitle(String title) {
         this.title = title;
     }
-    
-    public String getTitle(){
-        return this.title;
+
+    public String getTeacher() {
+        return teacher;
     }
-    
-    public void setPrice(double price) {
-        this.price = price;
-    }
-    
-    public double getPrice() {
-        return this.price;
-    }
-    
-    public void setTeacher(Teacher teacher){
+
+    public void setTeacher(String teacher) {
         this.teacher = teacher;
     }
-    
-    public Teacher getTeacher() {
-        return this.teacher;
-    }
-    
-    public ArrayList<Student> getEnrolledStudents() {
-        return this.enrolled_students;
+
+    public Double getPrice() {
+        return price;
     }
 
-    public void addEnrolledStudent(Student student){
-        this.enrolled_students.add(student);
-    }
-    public void deleteStudent(Student student) {
-        this.enrolled_students.remove(student);
+    public void setPrice(Double price) {
+        this.price = price;
     }
 
-    public double getRating() {
-        double mean = 0;
-        for (Review review: reviewList) {
-            mean += review.getRating();
-        }
-        return mean / reviewList.size();
+    public String getUnrolledStudent() {
+        return unrolledStudent;
     }
-    
+
+    public void setUnrolledStudent(String unrolledStudent) {
+        this.unrolledStudent = unrolledStudent;
+    }
+
     @Override
-    public boolean equals(Object o) {
-        if (!(o instanceof Course)) {
+    public int hashCode() {
+        int hash = 0;
+        hash += (courseId != null ? courseId.hashCode() : 0);
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object object) {
+        // TODO: Warning - this method won't work in the case the id fields are not set
+        if (!(object instanceof Course)) {
             return false;
         }
-        Course that = (Course) o;
-        return (Objects.equals(this.title, that.getTitle())) // same title
-                && (this.teacher == that.getTeacher()); // same teacher
-                // ajouter d`autres checks ici...
+        Course other = (Course) object;
+        if ((this.courseId == null && other.courseId != null) || (this.courseId != null && !this.courseId.equals(other.courseId))) {
+            return false;
+        }
+        return true;
     }
-    
+
     @Override
     public String toString() {
-        return "Course " + title + " given by " + teacher.getUsername() + " costs " + price + " CHF";
-
-        /*return "Course "
-                + "\nTitle=" + title
-                + "\nPrice=" + price
-                + "\nRating=" + getRating()
-                + "\nTeacher=" + teacher;*/
+        return "coursewebsite.models.Course[ courseId=" + courseId + " ]";
     }
+    
 }
-    
-    
-    
-    
-    
-    

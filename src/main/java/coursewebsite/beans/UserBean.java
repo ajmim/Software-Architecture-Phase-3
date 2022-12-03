@@ -13,6 +13,8 @@ import javax.enterprise.context.SessionScoped;
 import javax.inject.Named;
 import coursewebsite.beans.LoginBean;
 import java.util.ArrayList;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 
 /**
  *
@@ -21,7 +23,8 @@ import java.util.ArrayList;
 @Named(value = "userBean")
 @SessionScoped
 public class UserBean implements Serializable {
-
+    
+    
     private String email = "";
     private String username = "";
     private String firstName = "";
