@@ -6,20 +6,18 @@
 package coursewebsite.models;
 
 import java.io.Serializable;
-import java.util.Collection;
 import javax.persistence.Basic;
 import javax.persistence.Column;
+import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.ManyToMany;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
@@ -31,16 +29,15 @@ import javax.xml.bind.annotation.XmlTransient;
 @NamedQueries({
     @NamedQuery(name = "Teacher.findAll", query = "SELECT t FROM Teacher t"),
     @NamedQuery(name = "Teacher.findByFkUserStId", query = "SELECT t FROM Teacher t WHERE t.fkUserStId = :fkUserStId")})
-public class Teacher implements Serializable {
+public class Teacher extends User implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
     @Basic(optional = false)
     @NotNull
     @Column(name = "FK_USER_ST_ID")
+    @EmbeddedId //CHECK IF WORK ------------------------------------------------------
     private Integer fkUserStId;
-    @ManyToMany(mappedBy = "teacherCollection")
-    private Collection<Course> courseCollection;
     @JoinColumn(name = "FK_USER_ST_ID", referencedColumnName = "USER_ID", insertable = false, updatable = false)
     @OneToOne(optional = false)
     private User user;
@@ -58,15 +55,6 @@ public class Teacher implements Serializable {
 
     public void setFkUserStId(Integer fkUserStId) {
         this.fkUserStId = fkUserStId;
-    }
-
-    @XmlTransient
-    public Collection<Course> getCourseCollection() {
-        return courseCollection;
-    }
-
-    public void setCourseCollection(Collection<Course> courseCollection) {
-        this.courseCollection = courseCollection;
     }
 
     public User getUser() {

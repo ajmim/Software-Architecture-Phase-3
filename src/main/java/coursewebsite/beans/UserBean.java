@@ -7,12 +7,13 @@ import coursewebsite.exceptions.InsufficientBalanceException;
 import coursewebsite.models.Course;
 import coursewebsite.models.Student;
 import coursewebsite.models.Teacher;
-import coursewebsite.models.Transaction;
 import java.io.Serializable;
 import javax.enterprise.context.SessionScoped;
 import javax.inject.Named;
 import coursewebsite.beans.LoginBean;
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
@@ -23,7 +24,8 @@ import javax.persistence.PersistenceContext;
 @Named(value = "userBean")
 @SessionScoped
 public class UserBean implements Serializable {
-    
+    @PersistenceContext(unitName = "soar_PU")
+    private EntityManager em;
     
     private String email = "";
     private String username = "";
@@ -34,7 +36,14 @@ public class UserBean implements Serializable {
 
     public void createAStudent() throws AlreadyExistsException, DoesNotExistException {
         if (!emailStudentExists() && !usernameStudentExists()) {
-            Database.getInstance().addAStudent(new Student(username, firstName, lastName, email, password));
+            Student s = new Student();
+            s.setUsername(username);
+            s.setFirstName(firstName);
+            s.setLastName(lastName);
+            s.setEmail(email);
+            s.setPassword(password.hashCode());
+            em.persist(s);
+            //Database.getInstance().addAStudent(new Student(username, firstName, lastName, email, password));
         } else {throw new AlreadyExistsException("This username already exist");}
         // empty values
         this.email = "";
@@ -46,7 +55,13 @@ public class UserBean implements Serializable {
     
     public void createATeacher() throws AlreadyExistsException, DoesNotExistException{
         if (!emailTeacherExists() && !usernameTeacherExists()) {
-            Database.getInstance().addATeacher(new Teacher(username, firstName, lastName, email, password));
+            Teachet t = new Student();
+            t.setUsername(username);
+            t.setFirstName(firstName);
+            t.setLastName(lastName);
+            t.setEmail(email);
+            t.setPassword(password.hashCode());
+            em.persist(t);
         } else {throw new AlreadyExistsException("This username already exist");}
         // empty values
         this.email = "";

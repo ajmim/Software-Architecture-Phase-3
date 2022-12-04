@@ -6,8 +6,8 @@
 package coursewebsite.models;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import javax.persistence.Basic;
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -15,7 +15,6 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
-import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
@@ -66,11 +65,9 @@ public class User implements Serializable {
     @Size(max = 10)
     @Column(name = "CATEGORY")
     private String category;
-    @OneToOne(cascade = CascadeType.ALL, mappedBy = "user")
-    private Teacher teacher;
-    @OneToOne(cascade = CascadeType.ALL, mappedBy = "user")
-    private Student student;
-
+    
+    protected ArrayList<Transaction> transactions;
+    
     public User() {
     }
 
@@ -140,22 +137,6 @@ public class User implements Serializable {
 
     public void setCategory(String category) {
         this.category = category;
-    }
-
-    public Teacher getTeacher() {
-        return teacher;
-    }
-
-    public void setTeacher(Teacher teacher) {
-        this.teacher = teacher;
-    }
-
-    public Student getStudent() {
-        return student;
-    }
-
-    public void setStudent(Student student) {
-        this.student = student;
     }
 
     @Override

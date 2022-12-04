@@ -23,7 +23,10 @@ import javax.persistence.PersistenceContext;
 @Named(value = "courseBean")
 @SessionScoped
 public class CourseBean implements Serializable {
-
+    
+    @PersistenceContext(unitName = "soar_PU")
+    private EntityManager em;
+    
     private String courseTitle = "";
     private double price = 0.0;
 
