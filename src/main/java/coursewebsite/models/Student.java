@@ -99,10 +99,9 @@ public class Student extends User implements Serializable {
     public void enroll(Course course) throws InsufficientBalanceException {
         //Transaction t = new Transaction(this, course.getTeacher(), course.getPrice());
         if (this.getBalance() >= course.getPrice()) {
-            //this.addUserCourse(course);
-            //course.addEnrolledStudent(this);
             this.setBalance(this.getBalance() - course.getPrice());
             course.getTeacher().setBalance(course.getTeacher().getBalance() + course.getPrice());
+            //ajouter dans db les trucs --> exemple de methode définie dans Course: cours.addStudentInCourse(this);
         } else {
             throw new InsufficientBalanceException("Insufficient balance");
         }

@@ -53,7 +53,7 @@ public class Course implements Serializable {
         @JoinColumn(name = "FK_COURSE_TE_ID", referencedColumnName = "COURSE_ID")}, inverseJoinColumns = {
         @JoinColumn(name = "FK_FK_USER_TE_ID", referencedColumnName = "FK_USER_ST_ID")})
     @ManyToMany
-    private Collection<Teacher> teacherCollection;
+    private Collection<Teacher> teacherCollection; //Ask on Monday -------------------------------------------------------------------------
     @JoinTable(name = "enrolled", joinColumns = {
         @JoinColumn(name = "FK_COURSE_ST_ID", referencedColumnName = "COURSE_ID")}, inverseJoinColumns = {
         @JoinColumn(name = "FK_FK_USER_ST_ID", referencedColumnName = "FK_USER_TE_ID")})

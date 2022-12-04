@@ -66,7 +66,7 @@ public class User implements Serializable {
     @Column(name = "CATEGORY")
     private String category;
     
-    protected ArrayList<Transaction> transactions;
+    //protected ArrayList<Transaction> transactions;
     
     public User() {
     }

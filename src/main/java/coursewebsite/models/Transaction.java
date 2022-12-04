@@ -16,11 +16,7 @@ public class Transaction {
 
     }
 
-    public Student getTransactionStudent() { return this.student; }
 
-    public Teacher getTransactionTeacher() { return this.teacher; }
-
-    public double getTransactionAmount() { return this.amount; }
 
     @Override
     public String toString() {
