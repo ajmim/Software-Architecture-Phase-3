@@ -1,3 +1,4 @@
+
 package coursewebsite.beans;
 
 import static coursewebsite.beans.UserBean.findTeacherByUsername;

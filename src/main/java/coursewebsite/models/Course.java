@@ -6,17 +6,22 @@
 package coursewebsite.models;
 
 import java.io.Serializable;
+import java.util.Collection;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
@@ -29,9 +34,7 @@ import javax.xml.bind.annotation.XmlRootElement;
     @NamedQuery(name = "Course.findAll", query = "SELECT c FROM Course c"),
     @NamedQuery(name = "Course.findByCourseId", query = "SELECT c FROM Course c WHERE c.courseId = :courseId"),
     @NamedQuery(name = "Course.findByTitle", query = "SELECT c FROM Course c WHERE c.title = :title"),
-    @NamedQuery(name = "Course.findByTeacher", query = "SELECT c FROM Course c WHERE c.teacher = :teacher"),
-    @NamedQuery(name = "Course.findByPrice", query = "SELECT c FROM Course c WHERE c.price = :price"),
-    @NamedQuery(name = "Course.findByUnrolledStudent", query = "SELECT c FROM Course c WHERE c.unrolledStudent = :unrolledStudent")})
+    @NamedQuery(name = "Course.findByPrice", query = "SELECT c FROM Course c WHERE c.price = :price")})
 public class Course implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -43,15 +46,19 @@ public class Course implements Serializable {
     @Size(max = 100)
     @Column(name = "TITLE")
     private String title;
-    @Size(max = 100)
-    @Column(name = "TEACHER")
-    private String teacher;
     // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
     @Column(name = "PRICE")
     private Double price;
-    @Size(max = 10000)
-    @Column(name = "UNROLLED_STUDENT")
-    private String unrolledStudent;
+    @JoinTable(name = "responsible_for", joinColumns = {
+        @JoinColumn(name = "FK_COURSE_TE_ID", referencedColumnName = "COURSE_ID")}, inverseJoinColumns = {
+        @JoinColumn(name = "FK_FK_USER_TE_ID", referencedColumnName = "FK_USER_ST_ID")})
+    @ManyToMany
+    private Collection<Teacher> teacherCollection;
+    @JoinTable(name = "enrolled", joinColumns = {
+        @JoinColumn(name = "FK_COURSE_ST_ID", referencedColumnName = "COURSE_ID")}, inverseJoinColumns = {
+        @JoinColumn(name = "FK_FK_USER_ST_ID", referencedColumnName = "FK_USER_TE_ID")})
+    @ManyToMany
+    private Collection<Student> studentCollection;
 
     public Course() {
     }
@@ -76,14 +83,6 @@ public class Course implements Serializable {
         this.title = title;
     }
 
-    public String getTeacher() {
-        return teacher;
-    }
-
-    public void setTeacher(String teacher) {
-        this.teacher = teacher;
-    }
-
     public Double getPrice() {
         return price;
     }
@@ -92,12 +91,22 @@ public class Course implements Serializable {
         this.price = price;
     }
 
-    public String getUnrolledStudent() {
-        return unrolledStudent;
+    @XmlTransient
+    public Collection<Teacher> getTeacherCollection() {
+        return teacherCollection;
     }
 
-    public void setUnrolledStudent(String unrolledStudent) {
-        this.unrolledStudent = unrolledStudent;
+    public void setTeacherCollection(Collection<Teacher> teacherCollection) {
+        this.teacherCollection = teacherCollection;
+    }
+
+    @XmlTransient
+    public Collection<Student> getStudentCollection() {
+        return studentCollection;
+    }
+
+    public void setStudentCollection(Collection<Student> studentCollection) {
+        this.studentCollection = studentCollection;
     }
 
     @Override

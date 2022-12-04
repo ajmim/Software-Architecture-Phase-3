@@ -5,5 +5,7 @@
     <class>coursewebsite.models.Course</class>
     <class>coursewebsite.models.User</class>
     <class>coursewebsite.models.Transaction</class>
+    <class>coursewebsite.models.Teacher</class>
+    <class>coursewebsite.models.Student</class>
   </persistence-unit>
 </persistence>

@@ -7,6 +7,7 @@ package coursewebsite.models;
 
 import java.io.Serializable;
 import javax.persistence.Basic;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -14,6 +15,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
@@ -34,7 +36,7 @@ import javax.xml.bind.annotation.XmlRootElement;
     @NamedQuery(name = "User.findByEmail", query = "SELECT u FROM User u WHERE u.email = :email"),
     @NamedQuery(name = "User.findByPassword", query = "SELECT u FROM User u WHERE u.password = :password"),
     @NamedQuery(name = "User.findByBalance", query = "SELECT u FROM User u WHERE u.balance = :balance"),
-    @NamedQuery(name = "User.findByIsStudent", query = "SELECT u FROM User u WHERE u.isStudent = :isStudent")})
+    @NamedQuery(name = "User.findByCategory", query = "SELECT u FROM User u WHERE u.category = :category")})
 public class User implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -61,11 +63,15 @@ public class User implements Serializable {
     // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
     @Column(name = "BALANCE")
     private Double balance;
-    @Column(name = "IS_STUDENT")
-    private Boolean isStudent;
+    @Size(max = 10)
+    @Column(name = "CATEGORY")
+    private String category;
+    @OneToOne(cascade = CascadeType.ALL, mappedBy = "user")
+    private Teacher teacher;
+    @OneToOne(cascade = CascadeType.ALL, mappedBy = "user")
+    private Student student;
 
     public User() {
-        this.balance = 0.0;
     }
 
     public User(Integer userId) {
@@ -128,12 +134,28 @@ public class User implements Serializable {
         this.balance = balance;
     }
 
-    public Boolean getIsStudent() {
-        return isStudent;
+    public String getCategory() {
+        return category;
     }
 
-    public void setIsStudent(Boolean isStudent) {
-        this.isStudent = isStudent;
+    public void setCategory(String category) {
+        this.category = category;
+    }
+
+    public Teacher getTeacher() {
+        return teacher;
+    }
+
+    public void setTeacher(Teacher teacher) {
+        this.teacher = teacher;
+    }
+
+    public Student getStudent() {
+        return student;
+    }
+
+    public void setStudent(Student student) {
+        this.student = student;
     }
 
     @Override
