@@ -12,8 +12,6 @@ public class Transaction {
         this.student = student;
         this.teacher = teacher;
         this.amount= amount;
-            
-
     }
 
 
