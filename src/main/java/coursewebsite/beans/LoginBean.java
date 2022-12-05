@@ -2,15 +2,20 @@
 package coursewebsite.beans;
 
 import static coursewebsite.beans.UserBean.findTeacherByUsername;
+import coursewebsite.exceptions.AlreadyExistsException;
 import coursewebsite.exceptions.DoesNotExistException;
+import coursewebsite.models.Course;
 import coursewebsite.models.Student;
 import coursewebsite.models.Teacher;
+import coursewebsite.models.User;
 import javax.inject.Named;
 import javax.enterprise.context.SessionScoped;
 import java.io.Serializable;
+import java.util.List;
 import javax.faces.context.ExternalContext;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 /**
  *
  * @author IsmaTew
@@ -18,7 +23,7 @@ import javax.persistence.PersistenceContext;
 @Named(value = "loginBean")
 @SessionScoped
 public class LoginBean implements Serializable {
-    
+
     @PersistenceContext(unitName = "soar_PU")
     private EntityManager em;
     
@@ -29,7 +34,7 @@ public class LoginBean implements Serializable {
 
     public String studentLogsIn() {
         try {
-            Student student = UserBean.findStudentByUsername(username);
+            Student student = findStudentByUsername(username);
             if (student != null && student.isPasswordCorrect(password)) {
                 currentStudent = student;
                 return "/StudentPage/StudentMainPage.xhtml?faces-redirect=true"; 
@@ -39,6 +44,34 @@ public class LoginBean implements Serializable {
         }
         return "/MainPage/MainPage.xhtml?faces-redirect=true";
     }
+    
+    protected Student findStudentByUsername(String username) throws DoesNotExistException {
+        for (Student student : Database.getInstance().getStudents()) {
+            if (student.getUsername().equals(username)) {
+                return student;
+            }
+        }
+        throw new DoesNotExistException("The student " + username + " does not exist.");
+        
+        Query query = em.createNamedQuery("Users.findBFalseFalse4True" //From assistant code, but don't understand it!
+                + "FyUsername", User.class);
+        List<Student> s = query.setParameter("username", username).getResultList();
+        if (s.size() > 0) {
+            return s.get(0);
+        }
+        throw new DoesNotExistException("The user " + username + " does not exist.");
+    }
+    }
+    
+    protected static Teacher findTeacherByUsername(String username) throws DoesNotExistException {
+        for (Teacher teacher : Database.getInstance().getTeachers()) {
+            if (teacher.getUsername().equals(username)) {
+                return teacher;
+            }
+        }
+        throw new DoesNotExistException("The teacher " + username + " does not exist.");
+    }
+    
     public String teacherLogsIn() {
         try {
             Teacher teacher = findTeacherByUsername(username);
@@ -90,5 +123,14 @@ public class LoginBean implements Serializable {
     }
     public Teacher getCurrentTeacher() {
         return currentTeacher;
+    }
+
+    public Course doesCourseExistInUserCourses(Course course) throws AlreadyExistsException {
+        for (Course c : LoginBean.getStudentLoggedIn().getUserCourses()) {
+            if (course.equals(c)) {
+                throw new AlreadyExistsException("This course is already in your list of courses.");
+            }
+        }
+        return course;
     }
 }

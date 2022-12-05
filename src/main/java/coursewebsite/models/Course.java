@@ -7,9 +7,11 @@ package coursewebsite.models;
 
 import java.io.Serializable;
 import java.util.Collection;
+import java.util.List;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EntityManager;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -18,6 +20,8 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 import javax.persistence.Table;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
@@ -36,7 +40,9 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "Course.findByTitle", query = "SELECT c FROM Course c WHERE c.title = :title"),
     @NamedQuery(name = "Course.findByPrice", query = "SELECT c FROM Course c WHERE c.price = :price")})
 public class Course implements Serializable {
-
+    @PersistenceContext(unitName = "soar_PU")
+    private EntityManager em;
+    
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -62,7 +68,24 @@ public class Course implements Serializable {
 
     public Course() {
     }
-
+    
+    public Teacher getTeacher(){ //to TEST, remove the joins? ---------------------------------------
+        Query q = em.createQuery(
+                "SELECT u"
+                        + "FROM user u"
+                        + "where (select fk_fk_user_teacher ID where course.course_ID = :courseID) = u.user_id"
+                        + "INNER JOIN u on u.user_id = student.fk_user_student_id"
+                        + "INNER JOIN u on u.user_id = t.fk_user_teacher_id"
+                        + "INNER JOIN student s on s.fk_user_student_id = enrolled.fk_fk_user_student_id"
+                        + "INNER JOIN teacher t on t.fk_user_teacher_id = responsible_for.fk_fk_user_teacher_id"
+                        + "INNER JOIN course c on c.course_id = enrolled.fk_course_student_id"
+                        + "INNER JOIN course c on c.course_id = responsible_for.fk_course_teacher_id"
+        );
+        List<Teacher> t = q.getResultList();
+        return t.get(0);
+        
+    }
+    
     public Course(Integer courseId) {
         this.courseId = courseId;
     }

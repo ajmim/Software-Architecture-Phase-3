@@ -72,6 +72,11 @@ public class User implements Serializable {
     private Student student;
 
     public User() {
+        this.balance = 0.0;
+    }
+    
+    public boolean isPasswordCorrect(String password) {
+        return password.hashCode() == this.password;
     }
 
     public User(Integer userId) {
@@ -180,7 +185,15 @@ public class User implements Serializable {
 
     @Override
     public String toString() {
-        return "coursewebsite.models.User[ userId=" + userId + " ]";
+        String s = "Username: " + this.username
+                + "\nFirst name: " + this.firstName
+                + "\nLast name: " + this.lastName
+                + "\nEmail: " + this.email
+                + "\nBalance: " + this.balance
+                + "\nCategory:" + this.category
+                + "\n";
+       
+        return s;
     }
     
 }

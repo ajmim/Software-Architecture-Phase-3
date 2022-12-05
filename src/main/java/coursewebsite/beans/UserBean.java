@@ -55,7 +55,7 @@ public class UserBean implements Serializable {
     
     public void createATeacher() throws AlreadyExistsException, DoesNotExistException{
         if (!emailTeacherExists() && !usernameTeacherExists()) {
-            Teachet t = new Student();
+            Teacher t = new Student();
             t.setUsername(username);
             t.setFirstName(firstName);
             t.setLastName(lastName);
@@ -87,38 +87,7 @@ public class UserBean implements Serializable {
             System.out.println(ex.getMessage());
         }
     }
-    
-    
-    public Course doesCourseExistInUserCourses(Course course) throws AlreadyExistsException{
-        for (Course c : LoginBean.getStudentLoggedIn().getUserCourses()) {
-                if (course.equals(c)) {
-                throw new AlreadyExistsException("This course is already in your list of courses.");
-                }
-            }
-        return course;
-
-    }
-
-    protected static Student findStudentByUsername(String username) throws DoesNotExistException {
-        for (Student student : Database.getInstance().getStudents()) {
-            if (student.getUsername().equals(username)) {
-                return student;
-            }
-        }
-        throw new DoesNotExistException("The student " + username + " does not exist.");
-    }
-
-        
-    protected static Teacher findTeacherByUsername(String username) throws DoesNotExistException {
-        for (Teacher teacher : Database.getInstance().getTeachers()) {
-            if (teacher.getUsername().equals(username)) {
-                return teacher;
-            }
-        }
-        throw new DoesNotExistException("The teacher " + username + " does not exist.");
-    }   
-        
-        
+      
     private boolean emailStudentExists() throws AlreadyExistsException {
         for (Student student : Database.getInstance().getStudents()) {
             if (student.getEmail().equals(email)) {
