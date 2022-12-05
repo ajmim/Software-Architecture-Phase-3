@@ -53,8 +53,7 @@ public class LoginBean implements Serializable {
         }
         throw new DoesNotExistException("The student " + username + " does not exist.");
         
-        Query query = em.createNamedQuery("Users.findBFalseFalse4True" //From assistant code, but don't understand it!
-                + "FyUsername", User.class);
+        Query query = em.createNamedQuery("Users.findByUsernameByUsername", User.class);
         List<Student> s = query.setParameter("username", username).getResultList();
         if (s.size() > 0) {
             return s.get(0);
