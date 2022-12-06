@@ -48,6 +48,7 @@ public class Teacher extends User implements Serializable {
     private User user;
 
     public Teacher() {
+        this.setCategory("teacher");
     }
 
     public Teacher(Integer fkUserTeacherId) {

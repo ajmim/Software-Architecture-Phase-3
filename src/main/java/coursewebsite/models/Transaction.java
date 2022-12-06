@@ -13,7 +13,10 @@ public class Transaction {
         this.teacher = teacher;
         this.amount= amount;
     }
-
+    
+    public static Transaction createTransaction (Student student, Teacher teacher, double amount){
+        return new Transaction(student, teacher, amount);
+    }
 
 
     @Override

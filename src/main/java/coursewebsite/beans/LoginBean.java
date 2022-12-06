@@ -1,8 +1,6 @@
 
 package coursewebsite.beans;
 
-import static coursewebsite.beans.UserBean.findTeacherByUsername;
-import coursewebsite.exceptions.AlreadyExistsException;
 import coursewebsite.exceptions.DoesNotExistException;
 import coursewebsite.models.Course;
 import coursewebsite.models.Student;
@@ -34,7 +32,7 @@ public class LoginBean implements Serializable {
 
     public String studentLogsIn() {
         try {
-            Student student = findStudentByUsername(username);
+            Student student = findStudentByUsername();
             if (student != null && student.isPasswordCorrect(password)) {
                 currentStudent = student;
                 return "/StudentPage/StudentMainPage.xhtml?faces-redirect=true"; 
@@ -45,35 +43,9 @@ public class LoginBean implements Serializable {
         return "/MainPage/MainPage.xhtml?faces-redirect=true";
     }
     
-    protected Student findStudentByUsername(String username) throws DoesNotExistException {
-        for (Student student : Database.getInstance().getStudents()) {
-            if (student.getUsername().equals(username)) {
-                return student;
-            }
-        }
-        throw new DoesNotExistException("The student " + username + " does not exist.");
-        
-        Query query = em.createNamedQuery("Users.findByUsernameByUsername", User.class);
-        List<Student> s = query.setParameter("username", username).getResultList();
-        if (s.size() > 0) {
-            return s.get(0);
-        }
-        throw new DoesNotExistException("The user " + username + " does not exist.");
-    }
-    }
-    
-    protected static Teacher findTeacherByUsername(String username) throws DoesNotExistException {
-        for (Teacher teacher : Database.getInstance().getTeachers()) {
-            if (teacher.getUsername().equals(username)) {
-                return teacher;
-            }
-        }
-        throw new DoesNotExistException("The teacher " + username + " does not exist.");
-    }
-    
     public String teacherLogsIn() {
         try {
-            Teacher teacher = findTeacherByUsername(username);
+            Teacher teacher = findTeacherByUsername();
             if (teacher != null && teacher.isPasswordCorrect(password)) {
                 currentTeacher = teacher;
                 return "/TeacherPage/TeacherMainPage.xhtml?faces-redirect=true";
@@ -83,8 +55,25 @@ public class LoginBean implements Serializable {
         }
         return "/MainPage/MainPage.xhtml?faces-redirect=true";
     }
-
-  
+    
+    protected Student findStudentByUsername() throws DoesNotExistException {
+        Query query = em.createNamedQuery("User.findByUsernameByUsername", User.class);
+        List<Student> s = query.setParameter("username", username).getResultList();
+        if (s.size() > 0) {
+            return s.get(0);
+        }
+        throw new DoesNotExistException("The user " + username + " does not exist.");
+    }
+    
+    protected Teacher findTeacherByUsername() throws DoesNotExistException {
+        Query query = em.createNamedQuery("User.findByUsernameByUsername", User.class);
+        List<Teacher> t = query.setParameter("username", username).getResultList();
+        if (t.size() > 0) {
+            return t.get(0);
+        }
+        throw new DoesNotExistException("The user " + username + " does not exist.");
+    }
+    
     public String userLogsout() {
         currentStudent = null;
         currentTeacher = null;
@@ -124,12 +113,12 @@ public class LoginBean implements Serializable {
         return currentTeacher;
     }
 
-    public Course doesCourseExistInUserCourses(Course course) throws AlreadyExistsException {
-        for (Course c : LoginBean.getStudentLoggedIn().getUserCourses()) {
-            if (course.equals(c)) {
-                throw new AlreadyExistsException("This course is already in your list of courses.");
-            }
-        }
-        return course;
-    }
+    //public Course doesCourseExistInUserCourses(Course course) throws AlreadyExistsException {
+    //    for (Course c : LoginBean.getStudentLoggedIn().getUserCourses()) {
+    //        if (course.equals(c)) {
+    //            throw new AlreadyExistsException("This course is already in your list of courses.");
+    //        }
+    //    }
+    //    return course;
+    //}
 }

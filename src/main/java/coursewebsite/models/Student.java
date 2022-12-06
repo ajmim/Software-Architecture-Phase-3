@@ -49,6 +49,7 @@ public class Student extends User implements Serializable {
     private User user;
 
     public Student() {
+        this.setCategory("student");
     }
 
     public Student(Integer fkUserStudentId) {
@@ -106,10 +107,11 @@ public class Student extends User implements Serializable {
     }
     
     //------------ADDED------------------------
-    public void increaseBalance(double amount){
-        this.setBalance(this.getBalance()+amount);
-    }
+    //public void increaseBalance(double amount){
+    //    this.setBalance(this.getBalance()+amount);
+    //}
     
+    //TO DO
     public void enroll(Course course) throws InsufficientBalanceException {
         //Transaction t = new Transaction(this, course.getTeacher(), course.getPrice());
         if (this.getBalance() >= course.getPrice()) {

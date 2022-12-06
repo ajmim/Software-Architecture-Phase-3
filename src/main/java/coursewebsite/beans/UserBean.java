@@ -11,11 +11,15 @@ import java.io.Serializable;
 import javax.enterprise.context.SessionScoped;
 import javax.inject.Named;
 import coursewebsite.beans.LoginBean;
+import coursewebsite.models.Transaction;
+import coursewebsite.models.User;
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 
 /**
  *
@@ -35,15 +39,15 @@ public class UserBean implements Serializable {
     private double amount = 0.0;
 
     public void createAStudent() throws AlreadyExistsException, DoesNotExistException {
-        if (!emailStudentExists() && !usernameStudentExists()) {
-            Student s = new Student();
-            s.setUsername(username);
-            s.setFirstName(firstName);
-            s.setLastName(lastName);
-            s.setEmail(email);
-            s.setPassword(password.hashCode());
-            em.persist(s);
-            //Database.getInstance().addAStudent(new Student(username, firstName, lastName, email, password));
+        if (!emailExists() && !usernameExists()) {
+            Student newStudent = new Student();
+            newStudent.setUsername(username);
+            newStudent.setFirstName(firstName);
+            newStudent.setLastName(lastName);
+            newStudent.setEmail(email);
+            newStudent.setPassword(password.hashCode());
+            newStudent.setCategory("student");
+            em.persist(newStudent);
         } else {throw new AlreadyExistsException("This username already exist");}
         // empty values
         this.email = "";
@@ -54,13 +58,14 @@ public class UserBean implements Serializable {
         }
     
     public void createATeacher() throws AlreadyExistsException, DoesNotExistException{
-        if (!emailTeacherExists() && !usernameTeacherExists()) {
-            Teacher t = new Student();
+        if (!emailExists() && !usernameExists()) {
+            Teacher t = new Teacher();
             t.setUsername(username);
             t.setFirstName(firstName);
             t.setLastName(lastName);
             t.setEmail(email);
             t.setPassword(password.hashCode());
+            t.setCategory("teacher");
             em.persist(t);
         } else {throw new AlreadyExistsException("This username already exist");}
         // empty values
@@ -72,10 +77,18 @@ public class UserBean implements Serializable {
     }
 
     public void increaseBalance() {
-        LoginBean.getStudentLoggedIn().increaseBalance(amount);
+        //LoginBean.getStudentLoggedIn().increaseBalance(amount);
+        //this.amount = 0.0;
+        
+        Student s = LoginBean.getStudentLoggedIn();
+        s.setBalance(s.getBalance() + amount);
+        em.merge(s);
+        // empty value
         this.amount = 0.0;
     }
-
+    
+    //TO DO
+    /*
     public void completeEnroll(Course course) throws InsufficientBalanceException, AlreadyExistsException {
         try {
             System.out.print("test here");
@@ -87,41 +100,21 @@ public class UserBean implements Serializable {
             System.out.println(ex.getMessage());
         }
     }
+    */
       
-    private boolean emailStudentExists() throws AlreadyExistsException {
-        for (Student student : Database.getInstance().getStudents()) {
-            if (student.getEmail().equals(email)) {
-                throw new AlreadyExistsException("The email " + email + " already in use.");
-            }
-        }
-        return false;
+    private boolean emailExists() throws AlreadyExistsException {
+        Query query = em.createNamedQuery("User.findByEmail", User.class);
+        List<User> users = query.setParameter("email", email).getResultList();
+        return users.size() > 0;
     }
-        
-    private boolean emailTeacherExists() throws AlreadyExistsException {
-        for (Teacher teacher : Database.getInstance().getTeachers()) {
-            if (teacher.getEmail().equals(email))  {
-                throw new AlreadyExistsException("The email " + email + " already in use.");
-            }
-        }
-        return false;
-    }    
+          
 
-    protected boolean usernameStudentExists() throws DoesNotExistException {
-        for (Student student : Database.getInstance().getStudents()) {
-            if (student.getUsername().equals(username)) {
-                return true;
-            }
-        }
-        return false;
+    protected boolean usernameExists() throws DoesNotExistException {
+        Query query = em.createNamedQuery("User.findByUsername", User.class);
+        List<User> users = query.setParameter("username", username).getResultList();
+        return users.size() > 0;
     }
-    protected boolean usernameTeacherExists() throws DoesNotExistException {
-        for (Teacher teacher : Database.getInstance().getTeachers()) {
-            if (teacher.getUsername().equals(username)) {
-                return true;
-            }
-        }
-        return false;
-    }
+    
     public double getAmount() {
         return amount;
     }
@@ -175,14 +168,85 @@ public class UserBean implements Serializable {
         this.amount = amount;
     }
     
-    public ArrayList<Teacher> getAllTeachers() {
-        return Database.getInstance().getTeachers();
+    public List<Teacher> getAllTeachers() {
+        Query q = em.createNamedQuery("Teacher.findAll");
+        List<Teacher> teachers = q.getResultList();
+        return teachers;
     }
     
     public ArrayList<Transaction> getStudentTransactions() {
-        return LoginBean.getStudentLoggedIn().getTransactions();
+        //defining variables
+        Student s = LoginBean.getStudentLoggedIn();
+        int currentStudentId = s.getFkUserStudentId();
+        ArrayList<Transaction> transactions = new ArrayList<>();
+        
+        //selecting the enrolled table with currentStudent only --> get_courses
+        Query q1 = em.createQuery(
+                "SELECT fk_course_student_id FROM enrolled e "
+                        + "WHERE e.fk_fk_user_student_id = :currentStudentId"
+        );
+        List<Integer> courseIds = q1.getResultList(); //list of the courses ids 
+        
+        //For each course, create a transaction using currentStudent, teacher of course, and price of course      
+        for(int i : courseIds){
+            // 1)Get Teacher entity
+            Query q2 = em.createQuery("SELECT fk_fk_user_teacher_id "
+                    + "FROM responsible_for f WHERE f.course_teacher_id = " + i
+            );
+            List<Integer> tId = q2.getResultList();
+            int teacherId = tId.get(0);
+            Query q3 = em.createQuery("SELECT u from user u WHERE u.user_id = :teacher id");
+            List<Teacher> tmp_t = q3.getResultList();
+            Teacher t = tmp_t.get(0);
+
+            // 2) get Course Price
+            Query q4 = em.createQuery("SELECT c.price FROM course WHERE c.course_id = " + i);
+
+            List<Integer> coursePrice = q4.getResultList();
+            double p = coursePrice.get(0);
+
+            //Creating Transaction and adding it to the arraylist
+            Transaction tr = Transaction.createTransaction(s, t, p);
+            transactions.add(tr);
+    
+        }
+        return transactions;
     }
+    
     public ArrayList<Transaction> getTeacherTransactions() {
-        return LoginBean.getTeacherLoggedIn().getTransactions();
+        //defining variables
+        Teacher t = LoginBean.getTeacherLoggedIn();
+        ArrayList<Transaction> transactions = new ArrayList<>();
+        int currentTeacherId = t.getFkUserTeacherId();
+
+        //selecting the responsible table with right courses --> get_courses
+        Query q1 = em.createQuery(
+                "SELECT fk_course_teacher_id FROM responsible_for r "
+                        + "WHERE r.fk_fk_user_teacher_id = :currentTeacherId"
+        );
+        List<Integer> courseIds = q1.getResultList(); //list of the courses ids 
+        
+        for(int i : courseIds){
+            // 1)Get Course Price
+            Query q = em.createQuery("SELECT course.price FROM course WHERE course.course_id = " + i);
+            List<Integer> tmp_p = q.getResultList();
+            int p = tmp_p.get(0);
+            
+            //Get student
+            Query q2 = em.createQuery("SELECT fk_fk_user_student_id "
+                    + "FROM enrolled e WHERE e.course_student_id = " + i
+            );
+            List<Integer> studentIds = q2.getResultList();
+            for(int j:studentIds){
+                Query qq = em.createQuery("SELECT u FROM user u WHERE u.user_id = " + j);
+                List<Student> s_tmp = qq.getResultList();
+                Student s = s_tmp.get(0);
+                
+                Transaction tr = Transaction.createTransaction(s, t, p);
+                transactions.add(tr);
+                
+            }
+        }
+        return transactions;
     }
 }
