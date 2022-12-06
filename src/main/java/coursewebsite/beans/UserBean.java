@@ -1,6 +1,5 @@
 package coursewebsite.beans;
 
-import coursewebsite.Database.Database;
 import coursewebsite.exceptions.AlreadyExistsException;
 import coursewebsite.exceptions.DoesNotExistException;
 import coursewebsite.exceptions.InsufficientBalanceException;

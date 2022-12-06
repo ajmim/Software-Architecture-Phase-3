@@ -73,7 +73,7 @@ public class Course implements Serializable {
         Query q = em.createQuery(
                 "SELECT u"
                         + "FROM user u"
-                        + "where (select fk_fk_user_teacher ID where course.course_ID = :courseID) = u.user_id"
+                        + "where (select fk_fk_user_teacher_ID FROM responsible_for WHERE course.course_ID = :courseID) = u.user_id"
                         + "INNER JOIN u on u.user_id = student.fk_user_student_id"
                         + "INNER JOIN u on u.user_id = t.fk_user_teacher_id"
                         + "INNER JOIN student s on s.fk_user_student_id = enrolled.fk_fk_user_student_id"
