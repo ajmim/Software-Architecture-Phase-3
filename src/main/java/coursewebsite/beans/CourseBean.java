@@ -3,14 +3,12 @@ package coursewebsite.beans;
 import coursewebsite.exceptions.AlreadyExistsException;
 import coursewebsite.exceptions.DoesNotExistException;
 import coursewebsite.models.Course;
-import coursewebsite.models.Student;
+
 import coursewebsite.models.Teacher;
-import coursewebsite.models.User;
-import java.util.ArrayList;
+
 import java.io.Serializable;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+
 import javax.enterprise.context.SessionScoped;
 import javax.inject.Named;
 import javax.persistence.EntityManager;
@@ -20,6 +18,8 @@ import javax.persistence.Query;
 
 @Named(value = "courseBean")
 @SessionScoped
+//@SuppressWarnings("unchecked")
+//@transactionnal 
 public class CourseBean implements Serializable {
    
     @PersistenceContext(unitName = "soar_PU")

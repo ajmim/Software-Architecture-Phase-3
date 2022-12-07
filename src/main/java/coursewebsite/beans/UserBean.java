@@ -26,6 +26,8 @@ import javax.persistence.Query;
  */
 @Named(value = "userBean")
 @SessionScoped
+//@transactionnal 
+//@SuppressWarnings("unchecked")
 public class UserBean implements Serializable {
     @PersistenceContext(unitName = "soar_PU")
     private EntityManager em;

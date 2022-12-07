@@ -19,6 +19,8 @@ import javax.persistence.Query;
  * @author IsmaTew
  */
 @Named(value = "loginBean")
+//@SuppressWarnings("unchecked")
+//@transactionnal 
 @SessionScoped
 public class LoginBean implements Serializable {
 
