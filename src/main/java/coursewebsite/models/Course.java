@@ -25,14 +25,14 @@ import javax.xml.bind.annotation.XmlTransient;
 @Entity
 @Table(name = "course")
 @XmlRootElement
-@SuppressWarnings("unchecked")
+//@SuppressWarnings("unchecked")
 @NamedQueries({
     @NamedQuery(name = "Course.findAll", query = "SELECT c FROM Course c"),
     @NamedQuery(name = "Course.findByCourseId", query = "SELECT c FROM Course c WHERE c.courseId = :courseId"),
     @NamedQuery(name = "Course.findByTitle", query = "SELECT c FROM Course c WHERE c.title = :title"),
     @NamedQuery(name = "Course.findByPrice", query = "SELECT c FROM Course c WHERE c.price = :price")})
 public class Course implements Serializable {
-    @PersistenceContext(unitName = "soar_PU")
+    @PersistenceContext(unitName = "my_persistence_unit")
     private EntityManager em;
     
     private static final long serialVersionUID = 1L;

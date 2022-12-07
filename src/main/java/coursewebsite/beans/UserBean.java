@@ -19,6 +19,7 @@ import java.util.Set;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
+import javax.transaction.Transactional;
 
 /**
  *
@@ -29,7 +30,7 @@ import javax.persistence.Query;
 //@transactionnal 
 //@SuppressWarnings("unchecked")
 public class UserBean implements Serializable {
-    @PersistenceContext(unitName = "soar_PU")
+    @PersistenceContext(unitName = "my_persistence_unit")
     private EntityManager em;
     
     private String email = "";
@@ -39,6 +40,7 @@ public class UserBean implements Serializable {
     private String password = "";
     private double amount = 0.0;
 
+    @Transactional
     public void createAStudent() throws AlreadyExistsException, DoesNotExistException {
         if (!emailExists() && !usernameExists()) {
             Student newStudent = new Student();
@@ -47,9 +49,9 @@ public class UserBean implements Serializable {
             newStudent.setLastName(lastName);
             newStudent.setEmail(email);
             newStudent.setPassword(password.hashCode());
-            newStudent.setCategory("student");
+            //newStudent.setCategory("student");
             em.persist(newStudent);
-        } else {throw new AlreadyExistsException("This username already exist");}
+        } //else {throw new AlreadyExistsException("This username already exist");}
         // empty values
         this.email = "";
         this.username = "";
@@ -104,9 +106,10 @@ public class UserBean implements Serializable {
     */
       
     private boolean emailExists() throws AlreadyExistsException {
-        Query query = em.createNamedQuery("User.findByEmail", User.class);
-        List<User> users = query.setParameter("email", email).getResultList();
-        return users.size() > 0;
+        Query query = em.createNamedQuery("User.findByEmail");
+        query = query.setParameter("email", email);
+        List<User> users = query.getResultList();
+         return users.size() > 0;
     }
           
 
@@ -201,7 +204,7 @@ public class UserBean implements Serializable {
             Teacher t = tmp_t.get(0);
 
             // 2) get Course Price
-            Query q4 = em.createQuery("SELECT c.price FROM course WHERE c.course_id = " + i);
+            Query q4 = em.createQuery("SELECT c.price FROM course c WHERE c.course_id = " + i);
 
             List<Integer> coursePrice = q4.getResultList();
             double p = coursePrice.get(0);

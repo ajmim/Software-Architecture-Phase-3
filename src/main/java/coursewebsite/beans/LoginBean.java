@@ -24,7 +24,7 @@ import javax.persistence.Query;
 @SessionScoped
 public class LoginBean implements Serializable {
 
-    @PersistenceContext(unitName = "soar_PU")
+    @PersistenceContext(unitName = "my_persistence_unit")
     private EntityManager em;
     
     private String username = "";

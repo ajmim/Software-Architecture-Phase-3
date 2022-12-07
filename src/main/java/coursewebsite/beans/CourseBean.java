@@ -22,7 +22,7 @@ import javax.persistence.Query;
 //@transactionnal 
 public class CourseBean implements Serializable {
    
-    @PersistenceContext(unitName = "soar_PU")
+    @PersistenceContext(unitName = "my_persistence_unit")
     private EntityManager em;
     
     private String courseTitle = "";
@@ -38,9 +38,11 @@ public class CourseBean implements Serializable {
         return false;
     }*/
 
-    /*public ArrayList<Course> getCourses() {
-        return Database.getInstance().getCourses();
-    }*/
+    
+    //TO ADAPT ----------------------------------------------------------------
+    //public ArrayList<Course> getCourses() {
+    //    return Database.getInstance().getCourses();
+    //}
  
     
     /*public ArrayList<Course> getStudentCourses() {
