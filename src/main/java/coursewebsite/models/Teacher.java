@@ -6,7 +6,7 @@
 package coursewebsite.models;
 
 import java.io.Serializable;
-import java.util.Collection;
+import java.util.List;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.EmbeddedId;
@@ -27,6 +27,7 @@ import javax.xml.bind.annotation.XmlTransient;
  * @author moham
  */
 @Entity
+
 @Table(name = "teacher")
 @XmlRootElement
 @NamedQueries({
@@ -35,20 +36,19 @@ import javax.xml.bind.annotation.XmlTransient;
 public class Teacher extends User implements Serializable {
 
     private static final long serialVersionUID = 1L;
-    @Id
+    //@Id
     @EmbeddedId
     @Basic(optional = false)
     @NotNull
     @Column(name = "FK_USER_TEACHER_ID")
     private Integer fkUserTeacherId;
-    @ManyToMany(mappedBy = "teacherCollection")
-    private Collection<Course> courseCollection;
+    @ManyToMany(mappedBy = "teacherList")
+    private List<Course> courseList;
     @JoinColumn(name = "FK_USER_TEACHER_ID", referencedColumnName = "USER_ID", insertable = false, updatable = false)
     @OneToOne(optional = false)
     private User user;
 
     public Teacher() {
-        this.setCategory("teacher");
     }
 
     public Teacher(Integer fkUserTeacherId) {
@@ -64,12 +64,12 @@ public class Teacher extends User implements Serializable {
     }
 
     @XmlTransient
-    public Collection<Course> getCourseCollection() {
-        return courseCollection;
+    public List<Course> getCourseList() {
+        return courseList;
     }
 
-    public void setCourseCollection(Collection<Course> courseCollection) {
-        this.courseCollection = courseCollection;
+    public void setCourseList(List<Course> courseList) {
+        this.courseList = courseList;
     }
 
     public User getUser() {

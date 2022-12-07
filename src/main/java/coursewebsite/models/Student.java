@@ -5,9 +5,8 @@
  */
 package coursewebsite.models;
 
-import coursewebsite.exceptions.InsufficientBalanceException;
 import java.io.Serializable;
-import java.util.Collection;
+import java.util.List;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.EmbeddedId;
@@ -28,6 +27,7 @@ import javax.xml.bind.annotation.XmlTransient;
  * @author moham
  */
 @Entity
+
 @Table(name = "student")
 @XmlRootElement
 @NamedQueries({
@@ -36,20 +36,19 @@ import javax.xml.bind.annotation.XmlTransient;
 public class Student extends User implements Serializable {
 
     private static final long serialVersionUID = 1L;
-    @Id
+    //@Id
     @EmbeddedId
     @Basic(optional = false)
     @NotNull
     @Column(name = "FK_USER_STUDENT_ID")
     private Integer fkUserStudentId;
-    @ManyToMany(mappedBy = "studentCollection")
-    private Collection<Course> courseCollection;
+    @ManyToMany(mappedBy = "studentList")
+    private List<Course> courseList;
     @JoinColumn(name = "FK_USER_STUDENT_ID", referencedColumnName = "USER_ID", insertable = false, updatable = false)
     @OneToOne(optional = false)
     private User user;
 
     public Student() {
-        this.setCategory("student");
     }
 
     public Student(Integer fkUserStudentId) {
@@ -65,12 +64,12 @@ public class Student extends User implements Serializable {
     }
 
     @XmlTransient
-    public Collection<Course> getCourseCollection() {
-        return courseCollection;
+    public List<Course> getCourseList() {
+        return courseList;
     }
 
-    public void setCourseCollection(Collection<Course> courseCollection) {
-        this.courseCollection = courseCollection;
+    public void setCourseList(List<Course> courseList) {
+        this.courseList = courseList;
     }
 
     public User getUser() {
@@ -104,23 +103,6 @@ public class Student extends User implements Serializable {
     @Override
     public String toString() {
         return "coursewebsite.models.Student[ fkUserStudentId=" + fkUserStudentId + " ]";
-    }
-    
-    //------------ADDED------------------------
-    //public void increaseBalance(double amount){
-    //    this.setBalance(this.getBalance()+amount);
-    //}
-    
-    //TO DO
-    public void enroll(Course course) throws InsufficientBalanceException {
-        //Transaction t = new Transaction(this, course.getTeacher(), course.getPrice());
-        if (this.getBalance() >= course.getPrice()) {
-            this.setBalance(this.getBalance() - course.getPrice());
-            course.getTeacher().setBalance(course.getTeacher().getBalance() + course.getPrice());
-            //ajouter dans db les trucs --> exemple de methode définie dans Course: cours.addStudentInCourse(this);
-        } else {
-            throw new InsufficientBalanceException("Insufficient balance");
-        }
     }
     
 }

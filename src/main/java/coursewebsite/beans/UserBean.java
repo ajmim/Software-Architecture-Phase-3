@@ -43,15 +43,15 @@ public class UserBean implements Serializable {
     @Transactional
     public void createAStudent() throws AlreadyExistsException, DoesNotExistException {
         if (!emailExists() && !usernameExists()) {
-            Student newStudent = new Student();
+            User newStudent = new User();
             newStudent.setUsername(username);
             newStudent.setFirstName(firstName);
             newStudent.setLastName(lastName);
             newStudent.setEmail(email);
             newStudent.setPassword(password.hashCode());
-            //newStudent.setCategory("student");
+            newStudent.setCategory("student");
             em.persist(newStudent);
-        } //else {throw new AlreadyExistsException("This username already exist");}
+        } else {throw new AlreadyExistsException("This username already exist");}
         // empty values
         this.email = "";
         this.username = "";
@@ -104,18 +104,18 @@ public class UserBean implements Serializable {
         }
     }
     */
-      
-    private boolean emailExists() throws AlreadyExistsException {
-        Query query = em.createNamedQuery("User.findByEmail");
-        query = query.setParameter("email", email);
+    
+    
+    private boolean emailExists() { //throws AlreadyExistsException
+        Query query = em.createQuery("SELECT u.email FROM User u WHERE u.email = :email").setParameter("email", email);
         List<User> users = query.getResultList();
-         return users.size() > 0;
+        return users.size() > 0;
     }
           
-
-    protected boolean usernameExists() throws DoesNotExistException {
-        Query query = em.createNamedQuery("User.findByUsername", User.class);
-        List<User> users = query.setParameter("username", username).getResultList();
+    
+    protected boolean usernameExists() { //throws DoesNotExistException
+        Query query = em.createQuery("SELECT u.username FROM User u WHERE u.username = :username").setParameter("username", username);
+        List<User> users = query.getResultList();
         return users.size() > 0;
     }
     

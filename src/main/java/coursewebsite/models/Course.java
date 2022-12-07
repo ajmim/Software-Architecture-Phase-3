@@ -1,7 +1,11 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
 package coursewebsite.models;
 
 import java.io.Serializable;
-import java.util.Collection;
 import java.util.List;
 import javax.persistence.Basic;
 import javax.persistence.Column;
@@ -22,19 +26,23 @@ import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 
+/**
+ *
+ * @author moham
+ */
 @Entity
 @Table(name = "course")
 @XmlRootElement
-//@SuppressWarnings("unchecked")
 @NamedQueries({
     @NamedQuery(name = "Course.findAll", query = "SELECT c FROM Course c"),
     @NamedQuery(name = "Course.findByCourseId", query = "SELECT c FROM Course c WHERE c.courseId = :courseId"),
     @NamedQuery(name = "Course.findByTitle", query = "SELECT c FROM Course c WHERE c.title = :title"),
     @NamedQuery(name = "Course.findByPrice", query = "SELECT c FROM Course c WHERE c.price = :price")})
 public class Course implements Serializable {
+    
     @PersistenceContext(unitName = "my_persistence_unit")
     private EntityManager em;
-    
+
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -51,33 +59,16 @@ public class Course implements Serializable {
         @JoinColumn(name = "FK_COURSE_TEACHER_ID", referencedColumnName = "COURSE_ID")}, inverseJoinColumns = {
         @JoinColumn(name = "FK_FK_USER_TEACHER_ID", referencedColumnName = "FK_USER_TEACHER_ID")})
     @ManyToMany
-    private Collection<Teacher> teacherCollection;
+    private List<Teacher> teacherList;
     @JoinTable(name = "enrolled", joinColumns = {
         @JoinColumn(name = "FK_COURSE_STUDENT_ID", referencedColumnName = "COURSE_ID")}, inverseJoinColumns = {
         @JoinColumn(name = "FK_FK_USER_STUDENT_ID", referencedColumnName = "FK_USER_STUDENT_ID")})
     @ManyToMany
-    private Collection<Student> studentCollection;
+    private List<Student> studentList;
 
     public Course() {
     }
-    
-    public Teacher getTeacher(){ //to TEST, remove the joins? ---------------------------------------
-        Query q = em.createQuery(
-                "SELECT u"
-                        + "FROM user u"
-                        + "where (select fk_fk_user_teacher_ID FROM responsible_for WHERE course.course_ID = :courseID) = u.user_id"
-                        + "INNER JOIN u on u.user_id = student.fk_user_student_id"
-                        + "INNER JOIN u on u.user_id = t.fk_user_teacher_id"
-                        + "INNER JOIN student s on s.fk_user_student_id = enrolled.fk_fk_user_student_id"
-                        + "INNER JOIN teacher t on t.fk_user_teacher_id = responsible_for.fk_fk_user_teacher_id"
-                        + "INNER JOIN course c on c.course_id = enrolled.fk_course_student_id"
-                        + "INNER JOIN course c on c.course_id = responsible_for.fk_course_teacher_id"
-        );
-        List<Teacher> t = q.getResultList();
-        return t.get(0);
-        
-    }
-    
+
     public Course(Integer courseId) {
         this.courseId = courseId;
     }
@@ -107,21 +98,21 @@ public class Course implements Serializable {
     }
 
     @XmlTransient
-    public Collection<Teacher> getTeacherCollection() {
-        return teacherCollection;
+    public List<Teacher> getTeacherList() {
+        return teacherList;
     }
 
-    public void setTeacherCollection(Collection<Teacher> teacherCollection) {
-        this.teacherCollection = teacherCollection;
+    public void setTeacherList(List<Teacher> teacherList) {
+        this.teacherList = teacherList;
     }
 
     @XmlTransient
-    public Collection<Student> getStudentCollection() {
-        return studentCollection;
+    public List<Student> getStudentList() {
+        return studentList;
     }
 
-    public void setStudentCollection(Collection<Student> studentCollection) {
-        this.studentCollection = studentCollection;
+    public void setStudentList(List<Student> studentList) {
+        this.studentList = studentList;
     }
 
     @Override
@@ -147,6 +138,23 @@ public class Course implements Serializable {
     @Override
     public String toString() {
         return "coursewebsite.models.Course[ courseId=" + courseId + " ]";
+    }
+    
+    public Teacher getTeacher(){ //to TEST, remove the joins? ---------------------------------------
+        Query q = em.createQuery(
+                "SELECT u"
+                        + "FROM user u"
+                        + "where (select fk_fk_user_teacher_ID FROM responsible_for WHERE course.course_ID = :courseID) = u.user_id"
+                        + "INNER JOIN u on u.user_id = student.fk_user_student_id"
+                        + "INNER JOIN u on u.user_id = t.fk_user_teacher_id"
+                        + "INNER JOIN student s on s.fk_user_student_id = enrolled.fk_fk_user_student_id"
+                        + "INNER JOIN teacher t on t.fk_user_teacher_id = responsible_for.fk_fk_user_teacher_id"
+                        + "INNER JOIN course c on c.course_id = enrolled.fk_course_student_id"
+                        + "INNER JOIN course c on c.course_id = responsible_for.fk_course_teacher_id"
+        );
+        List<Teacher> t = q.getResultList();
+        return t.get(0);
+        
     }
     
 }

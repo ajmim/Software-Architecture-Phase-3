@@ -25,7 +25,7 @@ import javax.xml.bind.annotation.XmlRootElement;
  * @author moham
  */
 @Entity
-@Table(name = "User")
+@Table(name = "users")
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "User.findAll", query = "SELECT u FROM User u"),
@@ -72,11 +72,6 @@ public class User implements Serializable {
     private Student student;
 
     public User() {
-        this.balance = 0.0;
-    }
-    
-    public boolean isPasswordCorrect(String password) {
-        return password.hashCode() == this.password;
     }
 
     public User(Integer userId) {
@@ -129,6 +124,10 @@ public class User implements Serializable {
 
     public void setPassword(Integer password) {
         this.password = password;
+    }
+    
+    public boolean isPasswordCorrect(String password) {
+        return password.hashCode() == this.password;
     }
 
     public Double getBalance() {
@@ -185,15 +184,7 @@ public class User implements Serializable {
 
     @Override
     public String toString() {
-        String s = "Username: " + this.username
-                + "\nFirst name: " + this.firstName
-                + "\nLast name: " + this.lastName
-                + "\nEmail: " + this.email
-                + "\nBalance: " + this.balance
-                + "\nCategory:" + this.category
-                + "\n";
-       
-        return s;
+        return "coursewebsite.models.User[ userId=" + userId + " ]";
     }
     
 }
