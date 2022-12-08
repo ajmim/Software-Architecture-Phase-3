@@ -41,9 +41,9 @@
         <h:form>
             <br/>            
             <br/>             
-                <p:dataTable var="c" value="#{userBean.getAllTeachers()}">
+                <p:dataTable var="t" value="#{userBean.getAllTeachers()}">
                     <p:column headerText="Teacher">
-                        <h:outputText value="#{c.firstName}" />
+                        <h:outputText value="#{t.firstname}" />
                     </p:column>
                 </p:dataTable>
 

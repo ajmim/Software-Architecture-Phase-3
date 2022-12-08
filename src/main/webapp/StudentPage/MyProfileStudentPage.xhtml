@@ -52,43 +52,35 @@
                 <h:outputText value="Username:"/>
                 <h:outputText value="#{loginBean.currentUser.username}"/>
                 <h:outputText value="First Name:"/>
-                <h:outputText value="#{loginBean.currentUser.firstName}"/>
+                <h:outputText value="#{loginBean.currentUser.firstname}"/>
                 <h:outputText value="Last Name:"/>
-                <h:outputText value="#{loginBean.currentUser.lastName}"/>
+                <h:outputText value="#{loginBean.currentUser.lastname}"/>
                 <h:outputText value="Email:"/>
                 <h:outputText value="#{loginBean.currentUser.email}"/>
                 <br/>
             </h:panelGrid>
         </h:form>
 
-        <h2>Your transactions</h2>
-        <h:form>
-            <p:dataTable var="t" value="#{userBean.getStudentTransactions()}">
-                <p:column headerText="Transaction">
-                    <h:outputText value="#{t.toString()}" />
-                </p:column>
-            </p:dataTable>
-        </h:form>
+        
 
 
         <h2>Your Courses</h2>
 
 
         <h:form>
-            <p:dataTable var="co" value="#{loginBean.getStudentLoggedIn().getUserCourses()}">
+            <p:dataTable var="co" value="#{loginBean.getUserLoggedIn().getUserCourses()}">
                 <p:column headerText="Title">
                     <h:outputText value="#{co.title}" />
                 </p:column>
                 <p:column headerText="Teacher">
-                    <h:outputText value="#{co.teacher.firstName}" />
+                    <h:outputText value="#{co.teacher.firstname}" />
                 </p:column>
             </p:dataTable>
         </h:form>
 
         <h2>Your Balance</h2>
 
-
-        
+   
 
 
         <h:form>
@@ -116,6 +108,7 @@
             </h:panelGrid>
         </h:form>
 
+     
 <br/>
 <br/>
         <h:form>

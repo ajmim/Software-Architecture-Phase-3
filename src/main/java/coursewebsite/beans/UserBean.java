@@ -2,31 +2,21 @@ package coursewebsite.beans;
 
 import coursewebsite.exceptions.AlreadyExistsException;
 import coursewebsite.exceptions.DoesNotExistException;
-import coursewebsite.exceptions.InsufficientBalanceException;
-import coursewebsite.models.Course;
-
 import java.io.Serializable;
 import javax.enterprise.context.SessionScoped;
 import javax.inject.Named;
 import coursewebsite.beans.LoginBean;
-import coursewebsite.models.Transaction;
+import coursewebsite.models.Course;
 import coursewebsite.models.User;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import javax.transaction.Transactional;
 
-/**
- *
- * @author Melike Geçer
- */
 @Named(value = "userBean")
 @SessionScoped
-//@SuppressWarnings("unchecked")
 public class UserBean implements Serializable {
     
     @PersistenceContext(unitName = "my_persistence_unit")
@@ -65,6 +55,7 @@ public class UserBean implements Serializable {
         this.password = "";
         }
     
+    @Transactional
     public void createATeacher() throws AlreadyExistsException, DoesNotExistException{
         if (!emailExists() && !usernameExists()) {
             User t = new User();
@@ -177,8 +168,14 @@ public class UserBean implements Serializable {
         this.amount = amount;
     }
     
+    public ArrayList<Course> getUserCourses(){ // continue here---------------------------------
+        User user = LoginBean.getUserLoggedIn();
+        int user_id = user.getUserId();
+        //Query ...
+    }
+    
     public List<User> getAllTeachers() {
-        Query q = em.createNamedQuery("User.findByCategory", User.class).setParameter("category", category);
+        Query q = em.createNamedQuery("User.findByCategory", User.class).setParameter("category", "teacher");
         List<User> teachers = q.getResultList();
         return teachers;
     }

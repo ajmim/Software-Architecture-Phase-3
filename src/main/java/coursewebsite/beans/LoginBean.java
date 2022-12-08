@@ -29,22 +29,23 @@ public class LoginBean implements Serializable {
 
     public String studentLogsIn() {
         try {
-            User student = findUserByUsername();
-            if (student != null && student.isPasswordCorrect(password)) {
-                currentUser = student;
+            User user = findUserByUsername();
+            if (user != null && user.isPasswordCorrect(password) && "student".equals(user.getCategory())) {
+                currentUser = user;
                 return "/StudentPage/StudentMainPage.xhtml?faces-redirect=true"; 
             }
         } catch (DoesNotExistException ex) {
             System.out.println(ex.getMessage());
         }
+        System.out.println(currentUser == null);
         return "/MainPage/MainPage.xhtml?faces-redirect=true";
     }
     
     public String teacherLogsIn() {
         try {
-            User teacher = findUserByUsername();
-            if (teacher != null && teacher.isPasswordCorrect(password)) {
-                currentUser = teacher;
+            User user = findUserByUsername();
+            if (user != null && user.isPasswordCorrect(password) && "teacher".equals(user.getCategory())) {
+                currentUser = user;
                 return "/TeacherPage/TeacherMainPage.xhtml?faces-redirect=true";
             }
         } catch (DoesNotExistException ex) {
@@ -54,7 +55,7 @@ public class LoginBean implements Serializable {
     }
     
     protected User findUserByUsername() throws DoesNotExistException {
-        Query query = em.createNamedQuery("User.findByUsernameByUsername", User.class);
+        Query query = em.createNamedQuery("User.findByUsername", User.class);
         List<User> s = query.setParameter("username", username).getResultList();
         if (s.size() > 0) {
             return s.get(0);

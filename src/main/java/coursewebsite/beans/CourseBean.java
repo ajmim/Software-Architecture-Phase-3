@@ -3,6 +3,7 @@ package coursewebsite.beans;
 import coursewebsite.exceptions.AlreadyExistsException;
 import coursewebsite.exceptions.DoesNotExistException;
 import coursewebsite.models.Course;
+import coursewebsite.models.User;
 
 
 import java.io.Serializable;
@@ -43,6 +44,7 @@ public class CourseBean implements Serializable {
     public ArrayList<Course> getCourses() {
         return new ArrayList(em.createNamedQuery("Course.findAll", Course.class).getResultList());
     }
+    
  
     
     /*public ArrayList<Course> getStudentCourses() {
@@ -125,15 +127,22 @@ public class CourseBean implements Serializable {
         throw new AlreadyExistsException("Course " + courseTitle + " already exist.");
     }
 
-    /*public void deleteACourse(){
-        Teacher t = LoginBean.getTeacherLoggedIn();
-        if(searchCourse().getTeacher().equals(t)){
-            int key_course = searchCourse().getCourseId();
+    public void deleteACourse(){
+        User t = LoginBean.getUserLoggedIn();
+        if(searchCourse().getFkTeacherId().equals(t.getUserId())){
             Query q = em.createNamedQuery("Course.findByTitle", Course.class);
             List<Course> c = q.setParameter("title", courseTitle).getResultList();
             em.remove(c.get(0));
         }
         courseTitle = "";
+    }
+    
+    /*public String getTeacherName(Course c){
+        Integer teacherId = c.getFkTeacherId();
+        Query q = em.createNamedQuery("User.findByUserId", User.class).setParameter("userId", teacherId);
+        
+        return (String) q.getResultList().get(0);
+        
     }*/
     
     public double getPrice(){

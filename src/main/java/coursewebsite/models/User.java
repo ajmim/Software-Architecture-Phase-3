@@ -75,6 +75,7 @@ public class User implements Serializable {
     private Collection<Course> courseCollection1;
 
     public User() {
+        this.balance = 0.0;
     }
 
     public User(Integer userId) {
@@ -130,7 +131,7 @@ public class User implements Serializable {
     }
     
     public boolean isPasswordCorrect(String password) {
-        return password == this.password;
+        return password.equals(this.password);
     }
 
     public Double getBalance() {
