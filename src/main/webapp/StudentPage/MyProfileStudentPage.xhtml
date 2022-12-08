@@ -62,7 +62,14 @@
         </h:form>
 
         
-
+        <h2>Your transactions</h2>
+        <h:form>
+            <p:dataTable var="t" value="#{userBean.getStudentTransactions()}">
+                <p:column headerText="Transaction">
+                    <h:outputText value="#{t.toString()}" />
+                </p:column>
+            </p:dataTable>
+        </h:form>
 
         <h2>Your Courses</h2>
 
