@@ -6,33 +6,35 @@
 package coursewebsite.models;
 
 import java.io.Serializable;
+import java.util.Collection;
 import javax.persistence.Basic;
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToMany;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
-import javax.persistence.OneToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
  * @author moham
  */
 @Entity
-@Table(name = "users")
+@Table(name = "user")
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "User.findAll", query = "SELECT u FROM User u"),
     @NamedQuery(name = "User.findByUserId", query = "SELECT u FROM User u WHERE u.userId = :userId"),
     @NamedQuery(name = "User.findByUsername", query = "SELECT u FROM User u WHERE u.username = :username"),
-    @NamedQuery(name = "User.findByFirstName", query = "SELECT u FROM User u WHERE u.firstName = :firstName"),
-    @NamedQuery(name = "User.findByLastName", query = "SELECT u FROM User u WHERE u.lastName = :lastName"),
+    @NamedQuery(name = "User.findByFirstname", query = "SELECT u FROM User u WHERE u.firstname = :firstname"),
+    @NamedQuery(name = "User.findByLastname", query = "SELECT u FROM User u WHERE u.lastname = :lastname"),
     @NamedQuery(name = "User.findByEmail", query = "SELECT u FROM User u WHERE u.email = :email"),
     @NamedQuery(name = "User.findByPassword", query = "SELECT u FROM User u WHERE u.password = :password"),
     @NamedQuery(name = "User.findByBalance", query = "SELECT u FROM User u WHERE u.balance = :balance"),
@@ -45,31 +47,32 @@ public class User implements Serializable {
     @Basic(optional = false)
     @Column(name = "USER_ID")
     private Integer userId;
-    @Size(max = 50)
+    @Size(max = 45)
     @Column(name = "USERNAME")
     private String username;
-    @Size(max = 50)
-    @Column(name = "FIRST_NAME")
-    private String firstName;
-    @Size(max = 50)
-    @Column(name = "LAST_NAME")
-    private String lastName;
+    @Size(max = 45)
+    @Column(name = "FIRSTNAME")
+    private String firstname;
+    @Size(max = 45)
+    @Column(name = "LASTNAME")
+    private String lastname;
     // @Pattern(regexp="[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?", message="Invalid email")//if the field contains email address consider using this annotation to enforce field validation
-    @Size(max = 50)
+    @Size(max = 45)
     @Column(name = "EMAIL")
     private String email;
+    @Size(max = 45)
     @Column(name = "PASSWORD")
-    private Integer password;
+    private String password;
     // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
     @Column(name = "BALANCE")
     private Double balance;
-    @Size(max = 10)
+    @Size(max = 45)
     @Column(name = "CATEGORY")
     private String category;
-    @OneToOne(cascade = CascadeType.ALL, mappedBy = "user")
-    private Teacher teacher;
-    @OneToOne(cascade = CascadeType.ALL, mappedBy = "user")
-    private Student student;
+    @ManyToMany(mappedBy = "userCollection")
+    private Collection<Course> courseCollection;
+    @OneToMany(mappedBy = "fkTeacherId")
+    private Collection<Course> courseCollection1;
 
     public User() {
     }
@@ -94,20 +97,20 @@ public class User implements Serializable {
         this.username = username;
     }
 
-    public String getFirstName() {
-        return firstName;
+    public String getFirstname() {
+        return firstname;
     }
 
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
+    public void setFirstname(String firstname) {
+        this.firstname = firstname;
     }
 
-    public String getLastName() {
-        return lastName;
+    public String getLastname() {
+        return lastname;
     }
 
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
+    public void setLastname(String lastname) {
+        this.lastname = lastname;
     }
 
     public String getEmail() {
@@ -118,16 +121,16 @@ public class User implements Serializable {
         this.email = email;
     }
 
-    public Integer getPassword() {
+    public String getPassword() {
         return password;
     }
 
-    public void setPassword(Integer password) {
+    public void setPassword(String password) {
         this.password = password;
     }
     
     public boolean isPasswordCorrect(String password) {
-        return password.hashCode() == this.password;
+        return password == this.password;
     }
 
     public Double getBalance() {
@@ -146,20 +149,22 @@ public class User implements Serializable {
         this.category = category;
     }
 
-    public Teacher getTeacher() {
-        return teacher;
+    @XmlTransient
+    public Collection<Course> getCourseCollection() {
+        return courseCollection;
     }
 
-    public void setTeacher(Teacher teacher) {
-        this.teacher = teacher;
+    public void setCourseCollection(Collection<Course> courseCollection) {
+        this.courseCollection = courseCollection;
     }
 
-    public Student getStudent() {
-        return student;
+    @XmlTransient
+    public Collection<Course> getCourseCollection1() {
+        return courseCollection1;
     }
 
-    public void setStudent(Student student) {
-        this.student = student;
+    public void setCourseCollection1(Collection<Course> courseCollection1) {
+        this.courseCollection1 = courseCollection1;
     }
 
     @Override

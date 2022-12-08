@@ -8,5 +8,6 @@
     <class>coursewebsite.models.Transaction</class>
     <class>coursewebsite.models.Teacher</class>
     <class>coursewebsite.models.Student</class>
+    <exclude-unlisted-classes>false</exclude-unlisted-classes>
   </persistence-unit>
 </persistence>

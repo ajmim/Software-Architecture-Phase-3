@@ -4,8 +4,7 @@ import coursewebsite.exceptions.AlreadyExistsException;
 import coursewebsite.exceptions.DoesNotExistException;
 import coursewebsite.exceptions.InsufficientBalanceException;
 import coursewebsite.models.Course;
-import coursewebsite.models.Student;
-import coursewebsite.models.Teacher;
+
 import java.io.Serializable;
 import javax.enterprise.context.SessionScoped;
 import javax.inject.Named;
@@ -27,9 +26,9 @@ import javax.transaction.Transactional;
  */
 @Named(value = "userBean")
 @SessionScoped
-//@transactionnal 
 //@SuppressWarnings("unchecked")
 public class UserBean implements Serializable {
+    
     @PersistenceContext(unitName = "my_persistence_unit")
     private EntityManager em;
     
@@ -39,19 +38,25 @@ public class UserBean implements Serializable {
     private String lastName = "";
     private String password = "";
     private double amount = 0.0;
+    private String category = "";
+    
 
     @Transactional
     public void createAStudent() throws AlreadyExistsException, DoesNotExistException {
-        if (!emailExists() && !usernameExists()) {
-            User newStudent = new User();
-            newStudent.setUsername(username);
-            newStudent.setFirstName(firstName);
-            newStudent.setLastName(lastName);
-            newStudent.setEmail(email);
-            newStudent.setPassword(password.hashCode());
-            newStudent.setCategory("student");
-            em.persist(newStudent);
-        } else {throw new AlreadyExistsException("This username already exist");}
+        //try{
+            if (!emailExists() && !usernameExists()) {        
+                User newStudent = new User();
+                newStudent.setUsername(username);
+                newStudent.setFirstname(firstName);
+                newStudent.setLastname(lastName);
+                newStudent.setEmail(email);
+                newStudent.setPassword(password);
+                newStudent.setCategory("student");
+                em.persist(newStudent);
+            } 
+        //} catch(AlreadyExistsException| DoesNotExistException ex){
+        //    System.out.println(ex.getMessage());
+        //}
         // empty values
         this.email = "";
         this.username = "";
@@ -62,12 +67,12 @@ public class UserBean implements Serializable {
     
     public void createATeacher() throws AlreadyExistsException, DoesNotExistException{
         if (!emailExists() && !usernameExists()) {
-            Teacher t = new Teacher();
+            User t = new User();
             t.setUsername(username);
-            t.setFirstName(firstName);
-            t.setLastName(lastName);
+            t.setFirstname(firstName);
+            t.setLastname(lastName);
             t.setEmail(email);
-            t.setPassword(password.hashCode());
+            t.setPassword(password);
             t.setCategory("teacher");
             em.persist(t);
         } else {throw new AlreadyExistsException("This username already exist");}
@@ -83,7 +88,7 @@ public class UserBean implements Serializable {
         //LoginBean.getStudentLoggedIn().increaseBalance(amount);
         //this.amount = 0.0;
         
-        Student s = LoginBean.getStudentLoggedIn();
+        User s = LoginBean.getUserLoggedIn();
         s.setBalance(s.getBalance() + amount);
         em.merge(s);
         // empty value
@@ -172,13 +177,13 @@ public class UserBean implements Serializable {
         this.amount = amount;
     }
     
-    public List<Teacher> getAllTeachers() {
-        Query q = em.createNamedQuery("Teacher.findAll");
-        List<Teacher> teachers = q.getResultList();
+    public List<User> getAllTeachers() {
+        Query q = em.createNamedQuery("User.findByCategory", User.class).setParameter("category", category);
+        List<User> teachers = q.getResultList();
         return teachers;
     }
     
-    public ArrayList<Transaction> getStudentTransactions() {
+    /*public ArrayList<Transaction> getStudentTransactions() {
         //defining variables
         Student s = LoginBean.getStudentLoggedIn();
         int currentStudentId = s.getFkUserStudentId();
@@ -252,5 +257,5 @@ public class UserBean implements Serializable {
             }
         }
         return transactions;
-    }
+    }*/
 }

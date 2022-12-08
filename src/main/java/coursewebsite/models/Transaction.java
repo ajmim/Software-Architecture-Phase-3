@@ -1,20 +1,17 @@
 package coursewebsite.models;
 
-import coursewebsite.models.Student;
-import coursewebsite.models.Teacher;
-
 public class Transaction {
-    private final Student student;
-    private final Teacher teacher;
+    private final User student;
+    private final User teacher;
     private final double amount;
 
-    Transaction(Student student, Teacher teacher, double amount) {
+    Transaction(User student, User teacher, double amount) {
         this.student = student;
         this.teacher = teacher;
         this.amount= amount;
     }
     
-    public static Transaction createTransaction (Student student, Teacher teacher, double amount){
+    public static Transaction createTransaction (User student, User teacher, double amount){
         return new Transaction(student, teacher, amount);
     }
 

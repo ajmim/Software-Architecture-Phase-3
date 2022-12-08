@@ -50,13 +50,13 @@
         <h:form>
             <h:panelGrid columns="2">
                 <h:outputText value="Username:"/>
-                <h:outputText value="#{loginBean.currentStudent.username}"/>
+                <h:outputText value="#{loginBean.currentUser.username}"/>
                 <h:outputText value="First Name:"/>
-                <h:outputText value="#{loginBean.currentStudent.firstName}"/>
+                <h:outputText value="#{loginBean.currentUser.firstName}"/>
                 <h:outputText value="Last Name:"/>
-                <h:outputText value="#{loginBean.currentStudent.lastName}"/>
+                <h:outputText value="#{loginBean.currentUser.lastName}"/>
                 <h:outputText value="Email:"/>
-                <h:outputText value="#{loginBean.currentStudent.email}"/>
+                <h:outputText value="#{loginBean.currentUser.email}"/>
                 <br/>
             </h:panelGrid>
         </h:form>
@@ -96,7 +96,7 @@
 
             <h:panelGrid columns="1" style="margin-bottom: 10px">
                 <h:outputText value="Amount in the account: "/>
-                <h:outputText value="#{loginBean.currentStudent.balance}" />
+                <h:outputText value="#{loginBean.currentUser.balance}" />
                 <br/>
                 
                 <p:inputText id="txt1" value="#{userBean.amount}" />

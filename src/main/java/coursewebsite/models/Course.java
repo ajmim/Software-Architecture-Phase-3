@@ -6,21 +6,19 @@
 package coursewebsite.models;
 
 import java.io.Serializable;
-import java.util.List;
+import java.util.Collection;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.EntityManager;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
-import javax.persistence.PersistenceContext;
-import javax.persistence.Query;
 import javax.persistence.Table;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
@@ -39,9 +37,6 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "Course.findByTitle", query = "SELECT c FROM Course c WHERE c.title = :title"),
     @NamedQuery(name = "Course.findByPrice", query = "SELECT c FROM Course c WHERE c.price = :price")})
 public class Course implements Serializable {
-    
-    @PersistenceContext(unitName = "my_persistence_unit")
-    private EntityManager em;
 
     private static final long serialVersionUID = 1L;
     @Id
@@ -49,22 +44,20 @@ public class Course implements Serializable {
     @Basic(optional = false)
     @Column(name = "COURSE_ID")
     private Integer courseId;
-    @Size(max = 100)
+    @Size(max = 45)
     @Column(name = "TITLE")
     private String title;
     // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
     @Column(name = "PRICE")
     private Double price;
-    @JoinTable(name = "responsible_for", joinColumns = {
-        @JoinColumn(name = "FK_COURSE_TEACHER_ID", referencedColumnName = "COURSE_ID")}, inverseJoinColumns = {
-        @JoinColumn(name = "FK_FK_USER_TEACHER_ID", referencedColumnName = "FK_USER_TEACHER_ID")})
-    @ManyToMany
-    private List<Teacher> teacherList;
     @JoinTable(name = "enrolled", joinColumns = {
-        @JoinColumn(name = "FK_COURSE_STUDENT_ID", referencedColumnName = "COURSE_ID")}, inverseJoinColumns = {
-        @JoinColumn(name = "FK_FK_USER_STUDENT_ID", referencedColumnName = "FK_USER_STUDENT_ID")})
+        @JoinColumn(name = "FK_COURSE_ID", referencedColumnName = "COURSE_ID")}, inverseJoinColumns = {
+        @JoinColumn(name = "FK_USER_ID", referencedColumnName = "USER_ID")})
     @ManyToMany
-    private List<Student> studentList;
+    private Collection<User> userCollection;
+    @JoinColumn(name = "FK_TEACHER_ID", referencedColumnName = "USER_ID")
+    @ManyToOne
+    private User fkTeacherId;
 
     public Course() {
     }
@@ -98,21 +91,20 @@ public class Course implements Serializable {
     }
 
     @XmlTransient
-    public List<Teacher> getTeacherList() {
-        return teacherList;
+    public Collection<User> getUserCollection() {
+        return userCollection;
     }
 
-    public void setTeacherList(List<Teacher> teacherList) {
-        this.teacherList = teacherList;
+    public void setUserCollection(Collection<User> userCollection) {
+        this.userCollection = userCollection;
     }
 
-    @XmlTransient
-    public List<Student> getStudentList() {
-        return studentList;
+    public User getFkTeacherId() {
+        return fkTeacherId;
     }
 
-    public void setStudentList(List<Student> studentList) {
-        this.studentList = studentList;
+    public void setFkTeacherId(User fkTeacherId) {
+        this.fkTeacherId = fkTeacherId;
     }
 
     @Override
@@ -138,23 +130,6 @@ public class Course implements Serializable {
     @Override
     public String toString() {
         return "coursewebsite.models.Course[ courseId=" + courseId + " ]";
-    }
-    
-    public Teacher getTeacher(){ //to TEST, remove the joins? ---------------------------------------
-        Query q = em.createQuery(
-                "SELECT u"
-                        + "FROM user u"
-                        + "where (select fk_fk_user_teacher_ID FROM responsible_for WHERE course.course_ID = :courseID) = u.user_id"
-                        + "INNER JOIN u on u.user_id = student.fk_user_student_id"
-                        + "INNER JOIN u on u.user_id = t.fk_user_teacher_id"
-                        + "INNER JOIN student s on s.fk_user_student_id = enrolled.fk_fk_user_student_id"
-                        + "INNER JOIN teacher t on t.fk_user_teacher_id = responsible_for.fk_fk_user_teacher_id"
-                        + "INNER JOIN course c on c.course_id = enrolled.fk_course_student_id"
-                        + "INNER JOIN course c on c.course_id = responsible_for.fk_course_teacher_id"
-        );
-        List<Teacher> t = q.getResultList();
-        return t.get(0);
-        
     }
     
 }

@@ -4,9 +4,9 @@ import coursewebsite.exceptions.AlreadyExistsException;
 import coursewebsite.exceptions.DoesNotExistException;
 import coursewebsite.models.Course;
 
-import coursewebsite.models.Teacher;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.enterprise.context.SessionScoped;
@@ -39,10 +39,10 @@ public class CourseBean implements Serializable {
     }*/
 
     
-    //TO ADAPT ----------------------------------------------------------------
-    //public ArrayList<Course> getCourses() {
-    //    return Database.getInstance().getCourses();
-    //}
+    
+    public ArrayList<Course> getCourses() {
+        return new ArrayList(em.createNamedQuery("Course.findAll", Course.class).getResultList());
+    }
  
     
     /*public ArrayList<Course> getStudentCourses() {
@@ -125,7 +125,7 @@ public class CourseBean implements Serializable {
         throw new AlreadyExistsException("Course " + courseTitle + " already exist.");
     }
 
-    public void deleteACourse(){
+    /*public void deleteACourse(){
         Teacher t = LoginBean.getTeacherLoggedIn();
         if(searchCourse().getTeacher().equals(t)){
             int key_course = searchCourse().getCourseId();
@@ -134,7 +134,7 @@ public class CourseBean implements Serializable {
             em.remove(c.get(0));
         }
         courseTitle = "";
-    }
+    }*/
     
     public double getPrice(){
         return price;

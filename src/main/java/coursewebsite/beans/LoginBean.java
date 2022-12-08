@@ -2,15 +2,11 @@
 package coursewebsite.beans;
 
 import coursewebsite.exceptions.DoesNotExistException;
-import coursewebsite.models.Course;
-import coursewebsite.models.Student;
-import coursewebsite.models.Teacher;
 import coursewebsite.models.User;
 import javax.inject.Named;
 import javax.enterprise.context.SessionScoped;
 import java.io.Serializable;
 import java.util.List;
-import javax.faces.context.ExternalContext;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
@@ -29,14 +25,13 @@ public class LoginBean implements Serializable {
     
     private String username = "";
     private String password = "";
-    private static Student currentStudent;
-    private static Teacher currentTeacher;
+    private static User currentUser;
 
     public String studentLogsIn() {
         try {
-            Student student = findStudentByUsername();
+            User student = findUserByUsername();
             if (student != null && student.isPasswordCorrect(password)) {
-                currentStudent = student;
+                currentUser = student;
                 return "/StudentPage/StudentMainPage.xhtml?faces-redirect=true"; 
             }
         } catch (DoesNotExistException ex) {
@@ -47,9 +42,9 @@ public class LoginBean implements Serializable {
     
     public String teacherLogsIn() {
         try {
-            Teacher teacher = findTeacherByUsername();
+            User teacher = findUserByUsername();
             if (teacher != null && teacher.isPasswordCorrect(password)) {
-                currentTeacher = teacher;
+                currentUser = teacher;
                 return "/TeacherPage/TeacherMainPage.xhtml?faces-redirect=true";
             }
         } catch (DoesNotExistException ex) {
@@ -58,35 +53,22 @@ public class LoginBean implements Serializable {
         return "/MainPage/MainPage.xhtml?faces-redirect=true";
     }
     
-    protected Student findStudentByUsername() throws DoesNotExistException {
+    protected User findUserByUsername() throws DoesNotExistException {
         Query query = em.createNamedQuery("User.findByUsernameByUsername", User.class);
-        List<Student> s = query.setParameter("username", username).getResultList();
+        List<User> s = query.setParameter("username", username).getResultList();
         if (s.size() > 0) {
             return s.get(0);
         }
         throw new DoesNotExistException("The user " + username + " does not exist.");
     }
     
-    protected Teacher findTeacherByUsername() throws DoesNotExistException {
-        Query query = em.createNamedQuery("User.findByUsernameByUsername", User.class);
-        List<Teacher> t = query.setParameter("username", username).getResultList();
-        if (t.size() > 0) {
-            return t.get(0);
-        }
-        throw new DoesNotExistException("The user " + username + " does not exist.");
-    }
-    
     public String userLogsout() {
-        currentStudent = null;
-        currentTeacher = null;
+        currentUser = null;
         return "/MainPage/MainPage.xhtml?faces-redirect=true";
     }
 
-    public static Student getStudentLoggedIn(){return currentStudent;}
+    public static User getUserLoggedIn(){return currentUser;}
 
-    public static Teacher getTeacherLoggedIn() {return currentTeacher;}
-
-    
     public String getPassword() {
         return password;
     }
@@ -95,12 +77,11 @@ public class LoginBean implements Serializable {
         return username;
     }
 
-    public void setCurrentStudent(Student  currentStudent) {
-        this.currentStudent = currentStudent;
+    public void setCurrentUser(User  currentUser) {
+        this.currentUser = currentUser;
     }
-    public void setCurrentTeacher(Teacher teacher){
-        this.currentTeacher = currentTeacher;
-    }
+
+    
     public void setPassword(String password) {
         this.password = password;
     }
@@ -108,15 +89,14 @@ public class LoginBean implements Serializable {
     public void setUsername(String username) {
         this.username = username;
     }
-    public Student getCurrentStudent() {
-        return currentStudent;
-    }
-    public Teacher getCurrentTeacher() {
-        return currentTeacher;
+    public User getCurrentUser() {
+        return currentUser;
     }
 
+    
+
     //public Course doesCourseExistInUserCourses(Course course) throws AlreadyExistsException {
-    //    for (Course c : LoginBean.getStudentLoggedIn().getUserCourses()) {
+    //    for (Course c : LoginBean.getUserLoggedIn().getUserCourses()) {
     //        if (course.equals(c)) {
     //            throw new AlreadyExistsException("This course is already in your list of courses.");
     //        }
