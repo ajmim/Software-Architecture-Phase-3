@@ -20,8 +20,6 @@ import javax.transaction.Transactional;
 
 @Named(value = "courseBean")
 @SessionScoped
-//@SuppressWarnings("unchecked")
-//@transactionnal 
 public class CourseBean implements Serializable {
    
     @PersistenceContext(unitName = "my_persistence_unit")
@@ -30,52 +28,12 @@ public class CourseBean implements Serializable {
     private String courseTitle = "";
     private double price = 0.0;
  
- /*protected boolean doesCourseExistInStudentCourses() {
-        for (Course c : LoginBean.getStudentLoggedIn().getUserCourses()) {
-            if (c.getTitle().equals(courseTitle)) {
-                return true;
-            }
-            
-        }
-        return false;
-    }*/
-
-    
-    
+ 
     public ArrayList<Course> getCourses() {
         return new ArrayList(em.createNamedQuery("Course.findAll", Course.class).getResultList());
     }
-    
- 
-    
-    /*public ArrayList<Course> getStudentCourses() {
-        return LoginBean.getStudentLoggedIn().getUserCourses();
-    }*/
-    
-    /*public ArrayList<Course> getTeacherCourses() {
-        return LoginBean.getTeacherLoggedIn().getUserCourses();
-    }*/
-    
-    /*public boolean doesCourseExistInApp() throws DoesNotExistException {
-        
-        for (Course f : Database.getInstance().getCourses()) {
-            if (f.getTitle().equals(courseTitle)) {
-                return true;
-            }
-        }
-        throw new DoesNotExistException("Course " + courseTitle + " does not exist.");
-    }*/
-    
-    /*public Course sameCourseTitle() throws DoesNotExistException {
-        Query query = em.createNamedQuery("Course.findByTitle", Course.class);
-        List<Course> courses = query.getResultList();
-        if (courses.size() > 0) {
-            return courses.get(0);
-        }
-        throw new DoesNotExistException("Food " + courseTitle + " does not exist.");
-    }*/
 
-    public Course findCourseByTitle() throws DoesNotExistException{
+    public Course findCourseByTitle() throws DoesNotExistException {
         Query query = em.createNamedQuery("Course.findByTitle", Course.class);
         List<Course> courses = query.setParameter("title", courseTitle).getResultList();
         if (courses.size() > 0) {
@@ -83,6 +41,7 @@ public class CourseBean implements Serializable {
         }
         throw new DoesNotExistException("Course " + courseTitle + " does not exist.");
     }
+    
     public Course searchCourse(){
         try {
             return findCourseByTitle();
@@ -95,60 +54,36 @@ public class CourseBean implements Serializable {
     
     }
     
-    public Boolean doesCourseExist(){
+    public Boolean doesCourseExist() throws AlreadyExistsException {
         Query query = em.createNamedQuery("Course.findByTitle", Course.class);
         List<Course> courses = query.setParameter("title", courseTitle).getResultList();
-        return courses.size() > 0;
+        if(courses.size() > 0){throw new AlreadyExistsException("Course " + courses.get(0) + " already exists.");}
+        return false;
     }
-            
     
-    /*public Course searchTeacherCourse(){
-        Teacher t = LoginBean.getTeacherLoggedIn();
-        try {
-            Course f = findCourseByTitle(courseTitle);
-            
-            return f;
-        } catch (DoesNotExistException ex) {
+    @Transactional
+    public void createACourse() throws AlreadyExistsException { 
+        try{
+            if(!doesCourseExist()){
+                Course newCourse = new Course();
+                newCourse.setTitle(courseTitle);
+                newCourse.setPrice(price);
+                newCourse.setFkTeacherId(LoginBean.getUserLoggedIn());
+                em.persist(newCourse);
+            }
+        }catch(AlreadyExistsException ex){
             System.out.println(ex.getMessage());
         }
-        // empty values
-        this.courseTitle = "";
-        return null;
-    
-    }*/
-    
-    @Transactional
-    public void createACourse()  { //throws AlreadyExistsException
-        if(!doesCourseExist()){
-            Course newCourse = new Course();
-            newCourse.setTitle(courseTitle);
-            newCourse.setPrice(price);
-            newCourse.setFkTeacherId(LoginBean.getUserLoggedIn());
-            em.persist(newCourse);
-            //need to do something for relation table?
-        }
-        //throw new AlreadyExistsException("Course " + courseTitle + " already exist.");
     }
+    
     @Transactional
-    public void deleteACourse(){
+    public void deleteACourse() {
         User t = LoginBean.getUserLoggedIn();
         Course c = searchCourse();
-        if(c.getFkTeacherId().equals(t)){
-            //Query q = em.createNamedQuery("Course.findByTitle", Course.class);
-            //List<Course> c = q.setParameter("title", courseTitle).getResultList();
-            em.remove(c);
-        }
+        if(c.getFkTeacherId().equals(t)){em.remove(c);}
         courseTitle = "";
     }
-    
-    /*public String getTeacherName(Course c){
-        Integer teacherId = c.getFkTeacherId();
-        Query q = em.createNamedQuery("User.findByUserId", User.class).setParameter("userId", teacherId);
-        
-        return (String) q.getResultList().get(0);
-        
-    }*/
-    
+
     public double getPrice(){
         return price;
     }

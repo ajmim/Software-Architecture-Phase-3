@@ -37,7 +37,6 @@ public class LoginBean implements Serializable {
         } catch (DoesNotExistException ex) {
             System.out.println(ex.getMessage());
         }
-        System.out.println(currentUser == null);
         return "/MainPage/MainPage.xhtml?faces-redirect=true";
     }
     
@@ -93,15 +92,4 @@ public class LoginBean implements Serializable {
     public User getCurrentUser() {
         return currentUser;
     }
-
-    
-
-    //public Course doesCourseExistInUserCourses(Course course) throws AlreadyExistsException {
-    //    for (Course c : LoginBean.getUserLoggedIn().getUserCourses()) {
-    //        if (course.equals(c)) {
-    //            throw new AlreadyExistsException("This course is already in your list of courses.");
-    //        }
-    //    }
-    //    return course;
-    //}
 }
