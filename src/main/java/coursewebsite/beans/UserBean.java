@@ -76,7 +76,8 @@ public class UserBean implements Serializable {
         this.lastName = "";
         this.password = "";
     }
-
+    
+    @Transactional
     public void increaseBalance() {
         //LoginBean.getStudentLoggedIn().increaseBalance(amount);
         //this.amount = 0.0;
