@@ -1,12 +1,10 @@
 package coursewebsite.beans;
 
 import coursewebsite.exceptions.AlreadyExistsException;
-import coursewebsite.exceptions.DoesNotExistException;
 import java.io.Serializable;
 import javax.enterprise.context.SessionScoped;
 import javax.inject.Named;
 import coursewebsite.beans.LoginBean;
-import coursewebsite.beans.CourseBean;
 import coursewebsite.exceptions.InsufficientBalanceException;
 import coursewebsite.models.Course;
 import coursewebsite.models.Transaction;
@@ -36,8 +34,8 @@ public class UserBean implements Serializable {
     
 
     @Transactional
-    public void createAStudent() throws AlreadyExistsException, DoesNotExistException {
-        //try{
+    public void createAStudent() throws AlreadyExistsException {
+        try{
             if (!emailExists() && !usernameExists()) {        
                 User newStudent = new User();
                 newStudent.setUsername(username);
@@ -48,9 +46,9 @@ public class UserBean implements Serializable {
                 newStudent.setCategory("student");
                 em.persist(newStudent);
             } 
-        //} catch(AlreadyExistsException| DoesNotExistException ex){
-        //    System.out.println(ex.getMessage());
-        //}
+        } catch(AlreadyExistsException ex){
+            System.out.println(ex.getMessage());
+        }
         // empty values
         this.email = "";
         this.username = "";
@@ -60,17 +58,21 @@ public class UserBean implements Serializable {
         }
     
     @Transactional
-    public void createATeacher() throws AlreadyExistsException, DoesNotExistException{
-        if (!emailExists() && !usernameExists()) {
-            User t = new User();
-            t.setUsername(username);
-            t.setFirstname(firstName);
-            t.setLastname(lastName);
-            t.setEmail(email);
-            t.setPassword(password);
-            t.setCategory("teacher");
-            em.persist(t);
-        } else {throw new AlreadyExistsException("This username already exist");}
+    public void createATeacher() throws AlreadyExistsException{
+        try{
+            if (!emailExists() && !usernameExists()) {
+                User t = new User();
+                t.setUsername(username);
+                t.setFirstname(firstName);
+                t.setLastname(lastName);
+                t.setEmail(email);
+                t.setPassword(password);
+                t.setCategory("teacher");
+                em.persist(t);
+            }
+        } catch(AlreadyExistsException ex){
+            System.out.println(ex.getMessage());
+        }
         // empty values
         this.email = "";
         this.username = "";
@@ -81,9 +83,6 @@ public class UserBean implements Serializable {
     
     @Transactional
     public void increaseBalance() {
-        //LoginBean.getStudentLoggedIn().increaseBalance(amount);
-        //this.amount = 0.0;
-        
         User s = LoginBean.getUserLoggedIn();
         s.setBalance(s.getBalance() + amount);
         em.merge(s);
@@ -92,11 +91,16 @@ public class UserBean implements Serializable {
     }
     
     @Transactional
-    public void enroll(Course c) { //throws InsufficientBalanceException, AlreadyExistsException
+    public void enroll(Course c)throws InsufficientBalanceException, AlreadyExistsException { 
         User s = LoginBean.getUserLoggedIn();
         User t = c.getFkTeacherId();
         Collection<Course> userCourses = s.getCourseCollection();
-
+        if(s.getBalance() > c.getPrice()){
+            throw new InsufficientBalanceException("you don't have enough money in your account.");
+        }if(!userCourses.contains(c)){
+            throw new AlreadyExistsException("You are already enrolled in this course.");
+        }
+        
         if(s.getBalance() > c.getPrice() && !userCourses.contains(c)){
             s.setBalance(s.getBalance() - c.getPrice());
             t.setBalance(t.getBalance() + c.getPrice());
@@ -109,23 +113,26 @@ public class UserBean implements Serializable {
     }
     
     @Transactional
-    public void completeEnroll(Course course)  {//throws InsufficientBalanceException, AlreadyExistsException
-        enroll(course);
+    public void completeEnroll(Course course) throws InsufficientBalanceException, AlreadyExistsException  {
+        try{
+            enroll(course);
+        }catch(InsufficientBalanceException | AlreadyExistsException ex){
+            System.out.println(ex.getMessage());
+        }
     }
-    
-    
-    
-    private boolean emailExists() { //throws AlreadyExistsException
+
+    private boolean emailExists() throws AlreadyExistsException {
         Query query = em.createQuery("SELECT u.email FROM User u WHERE u.email = :email").setParameter("email", email);
         List<User> users = query.getResultList();
-        return users.size() > 0;
+        if(users.size() > 0){throw new AlreadyExistsException("Email already exists.");}
+        return false;
     }
           
-    
-    protected boolean usernameExists() { //throws DoesNotExistException
+    protected boolean usernameExists() throws AlreadyExistsException { 
         Query query = em.createQuery("SELECT u.username FROM User u WHERE u.username = :username").setParameter("username", username);
         List<User> users = query.getResultList();
-        return users.size() > 0;
+        if(users.size() > 0){throw new AlreadyExistsException("username already exists.");}
+        return false;
     }
     
     public double getAmount() {
@@ -210,7 +217,6 @@ public class UserBean implements Serializable {
     }
     
     public ArrayList<Transaction> getStudentTransactions() {
-        //defining variables
         User s = LoginBean.getUserLoggedIn();
         int currentStudentId = s.getUserId();
         ArrayList<Transaction> transactions = new ArrayList<>();
@@ -218,10 +224,9 @@ public class UserBean implements Serializable {
         for (Course c : getStudentCourses()){
             User teacher_id = c.getFkTeacherId();
             double c_price = c.getPrice();
-            transactions.add(Transaction.createTransaction(s, teacher_id, c_price));
-            
+            transactions.add(Transaction.createTransaction(s, teacher_id, c_price)); 
         }
-       
+        
         return transactions;
     }
     
@@ -231,8 +236,7 @@ public class UserBean implements Serializable {
         //int currentStudentId = t.getUserId();
         ArrayList<Transaction> transactions = new ArrayList<>();
         ArrayList<Course> courses = new ArrayList(em.createNamedQuery("Course.findAll", Course.class).getResultList());
-        
-        
+
         for(Course c : courses){
             if(c.getFkTeacherId().equals(t)){
                 double price = c.getPrice();
