@@ -6,11 +6,12 @@ import java.io.Serializable;
 import javax.enterprise.context.SessionScoped;
 import javax.inject.Named;
 import coursewebsite.beans.LoginBean;
+import coursewebsite.exceptions.InsufficientBalanceException;
 import coursewebsite.models.Course;
 import coursewebsite.models.Transaction;
 import coursewebsite.models.User;
 import java.util.ArrayList;
-
+import java.util.Collection;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -89,11 +90,21 @@ public class UserBean implements Serializable {
         this.amount = 0.0;
     }
     
-    //TO DO
-    /*
-    public void completeEnroll(Course course) throws InsufficientBalanceException, AlreadyExistsException {
+    public void enroll(Course c) { //throws InsufficientBalanceException, AlreadyExistsException
+        User s = LoginBean.getUserLoggedIn();
+        User t = c.getFkTeacherId();
+        if(s.getBalance() > c.getPrice()){
+            s.setBalance(s.getBalance() - c.getPrice());
+            t.setBalance(t.getBalance() + c.getPrice());
+            // ADDING TO THE REL. TABLE
+            Collection<User> tmp = c.getUserCollection();
+            tmp.add(s);
+            em.merge(c.getCourseId());
+        }
+    }
+    
+    /*public void completeEnroll(Course course) throws InsufficientBalanceException, AlreadyExistsException {
         try {
-            System.out.print("test here");
             Course c = doesCourseExistInUserCourses(course);
             LoginBean.getStudentLoggedIn().enroll(c);
         } catch (InsufficientBalanceException ex) {
@@ -101,8 +112,8 @@ public class UserBean implements Serializable {
         } catch (AlreadyExistsException ex){
             System.out.println(ex.getMessage());
         }
-    }
-    */
+    }*/
+    
     
     
     private boolean emailExists() { //throws AlreadyExistsException
