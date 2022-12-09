@@ -85,7 +85,7 @@
                     <h:outputText value="#{c.title}" />
                 </p:column>
                 <p:column headerText="Teacher">
-                    <h:outputText value="#{c.getFkTeacherId()}" />
+                    <h:outputText value="#{c.getFkTeacherId().getFirstname()}" />
                 </p:column>
                 <p:column headerText="Price">
                     <h:outputText value="#{c.price}" />

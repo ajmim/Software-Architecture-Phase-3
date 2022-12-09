@@ -32,9 +32,9 @@ and open the template in the editor.
                 <p:column headerText="Title">
                     <h:outputText value="#{c.title}" />
                 </p:column>
-                <!--<p:column headerText="Teacher">
-                    <h:outputText value="#{c.teacher.getFirstName()}" />
-                </p:column>-->
+                <p:column headerText="Teacher">
+                    <h:outputText value="#{c.getFkTeacherId().getFirstname()}" />
+                </p:column>
                 <p:column headerText="Price">
                     <h:outputText value="#{c.price}" />
                 </p:column>

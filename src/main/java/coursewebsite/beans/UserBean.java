@@ -94,10 +94,11 @@ public class UserBean implements Serializable {
     public void enroll(Course c)throws InsufficientBalanceException, AlreadyExistsException { 
         User s = LoginBean.getUserLoggedIn();
         User t = c.getFkTeacherId();
+        
         Collection<Course> userCourses = s.getCourseCollection();
-        if(s.getBalance() > c.getPrice()){
+        if(s.getBalance() < c.getPrice()){
             throw new InsufficientBalanceException("you don't have enough money in your account.");
-        }if(!userCourses.contains(c)){
+        }if(userCourses.contains(c)){
             throw new AlreadyExistsException("You are already enrolled in this course.");
         }
         
@@ -108,6 +109,8 @@ public class UserBean implements Serializable {
             Collection<User> tmp = c.getUserCollection();
             tmp.add(s);
             em.merge(c);
+            em.merge(s);
+            em.merge(t);
         }
         
     }
