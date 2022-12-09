@@ -90,29 +90,27 @@ public class UserBean implements Serializable {
         this.amount = 0.0;
     }
     
+    @Transactional
     public void enroll(Course c) { //throws InsufficientBalanceException, AlreadyExistsException
         User s = LoginBean.getUserLoggedIn();
         User t = c.getFkTeacherId();
-        if(s.getBalance() > c.getPrice()){
+        Collection<Course> userCourses = s.getCourseCollection();
+
+        if(s.getBalance() > c.getPrice() && !userCourses.contains(c)){
             s.setBalance(s.getBalance() - c.getPrice());
             t.setBalance(t.getBalance() + c.getPrice());
             // ADDING TO THE REL. TABLE
             Collection<User> tmp = c.getUserCollection();
             tmp.add(s);
-            em.merge(c.getCourseId());
+            em.merge(c);
         }
+        
     }
     
-    /*public void completeEnroll(Course course) throws InsufficientBalanceException, AlreadyExistsException {
-        try {
-            Course c = doesCourseExistInUserCourses(course);
-            LoginBean.getStudentLoggedIn().enroll(c);
-        } catch (InsufficientBalanceException ex) {
-            System.out.println(ex.getMessage());
-        } catch (AlreadyExistsException ex){
-            System.out.println(ex.getMessage());
-        }
-    }*/
+    @Transactional
+    public void completeEnroll(Course course)  {//throws InsufficientBalanceException, AlreadyExistsException
+        enroll(course);
+    }
     
     
     
