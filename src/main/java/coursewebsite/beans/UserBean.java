@@ -7,8 +7,10 @@ import javax.enterprise.context.SessionScoped;
 import javax.inject.Named;
 import coursewebsite.beans.LoginBean;
 import coursewebsite.models.Course;
+import coursewebsite.models.Transaction;
 import coursewebsite.models.User;
 import java.util.ArrayList;
+
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -168,10 +170,13 @@ public class UserBean implements Serializable {
         this.amount = amount;
     }
     
-    public ArrayList<Course> getUserCourses(){ // continue here---------------------------------
-        User user = LoginBean.getUserLoggedIn();
-        int user_id = user.getUserId();
-        //Query ...
+    public List<Course> getUserCourses(){
+        int user_id = LoginBean.getUserLoggedIn().getUserId();
+
+        Query q = em.createQuery("SELECT c FROM Course c INNER JOIN c.userCollection u WHERE u.userId = :user_id"
+                , Course.class).setParameter("user_id", user_id);
+        
+        return q.getResultList();
     }
     
     public List<User> getAllTeachers() {
@@ -180,45 +185,23 @@ public class UserBean implements Serializable {
         return teachers;
     }
     
-    /*public ArrayList<Transaction> getStudentTransactions() {
+    public ArrayList<Transaction> getStudentTransactions() {
         //defining variables
-        Student s = LoginBean.getStudentLoggedIn();
-        int currentStudentId = s.getFkUserStudentId();
+        User s = LoginBean.getUserLoggedIn();
+        int currentStudentId = s.getUserId();
         ArrayList<Transaction> transactions = new ArrayList<>();
         
-        //selecting the enrolled table with currentStudent only --> get_courses
-        Query q1 = em.createQuery(
-                "SELECT fk_course_student_id FROM enrolled e "
-                        + "WHERE e.fk_fk_user_student_id = :currentStudentId"
-        );
-        List<Integer> courseIds = q1.getResultList(); //list of the courses ids 
-        
-        //For each course, create a transaction using currentStudent, teacher of course, and price of course      
-        for(int i : courseIds){
-            // 1)Get Teacher entity
-            Query q2 = em.createQuery("SELECT fk_fk_user_teacher_id "
-                    + "FROM responsible_for f WHERE f.course_teacher_id = " + i
-            );
-            List<Integer> tId = q2.getResultList();
-            int teacherId = tId.get(0);
-            Query q3 = em.createQuery("SELECT u from user u WHERE u.user_id = :teacher id");
-            List<Teacher> tmp_t = q3.getResultList();
-            Teacher t = tmp_t.get(0);
-
-            // 2) get Course Price
-            Query q4 = em.createQuery("SELECT c.price FROM course c WHERE c.course_id = " + i);
-
-            List<Integer> coursePrice = q4.getResultList();
-            double p = coursePrice.get(0);
-
-            //Creating Transaction and adding it to the arraylist
-            Transaction tr = Transaction.createTransaction(s, t, p);
-            transactions.add(tr);
-    
+        for (Course c : getUserCourses()){
+            User teacher_id = c.getFkTeacherId();
+            double c_price = c.getPrice();
+            transactions.add(Transaction.createTransaction(s, teacher_id, c_price));
+            
         }
+       
         return transactions;
     }
     
+    /*
     public ArrayList<Transaction> getTeacherTransactions() {
         //defining variables
         Teacher t = LoginBean.getTeacherLoggedIn();
