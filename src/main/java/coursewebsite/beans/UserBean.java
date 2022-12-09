@@ -6,6 +6,7 @@ import java.io.Serializable;
 import javax.enterprise.context.SessionScoped;
 import javax.inject.Named;
 import coursewebsite.beans.LoginBean;
+import coursewebsite.beans.CourseBean;
 import coursewebsite.exceptions.InsufficientBalanceException;
 import coursewebsite.models.Course;
 import coursewebsite.models.Transaction;
@@ -180,13 +181,26 @@ public class UserBean implements Serializable {
         this.amount = amount;
     }
     
-    public List<Course> getUserCourses(){
+    public List<Course> getStudentCourses(){
         int user_id = LoginBean.getUserLoggedIn().getUserId();
 
         Query q = em.createQuery("SELECT c FROM Course c INNER JOIN c.userCollection u WHERE u.userId = :user_id"
                 , Course.class).setParameter("user_id", user_id);
         
         return q.getResultList();
+    }
+    
+    public ArrayList<Course> getTeacherCourses(){
+        User t = LoginBean.getUserLoggedIn();
+        //int currentStudentId = t.getUserId();
+        ArrayList<Course> courses = new ArrayList(em.createNamedQuery("Course.findAll", Course.class).getResultList());
+        ArrayList<Course> t_courses = new ArrayList();
+        for(Course c : courses){
+            if(c.getFkTeacherId().equals(t)){
+                t_courses.add(c);
+                }
+            }
+        return t_courses;
     }
     
     public List<User> getAllTeachers() {
@@ -201,7 +215,7 @@ public class UserBean implements Serializable {
         int currentStudentId = s.getUserId();
         ArrayList<Transaction> transactions = new ArrayList<>();
         
-        for (Course c : getUserCourses()){
+        for (Course c : getStudentCourses()){
             User teacher_id = c.getFkTeacherId();
             double c_price = c.getPrice();
             transactions.add(Transaction.createTransaction(s, teacher_id, c_price));
@@ -211,41 +225,24 @@ public class UserBean implements Serializable {
         return transactions;
     }
     
-    /*
+    
     public ArrayList<Transaction> getTeacherTransactions() {
-        //defining variables
-        Teacher t = LoginBean.getTeacherLoggedIn();
+        User t = LoginBean.getUserLoggedIn();
+        //int currentStudentId = t.getUserId();
         ArrayList<Transaction> transactions = new ArrayList<>();
-        int currentTeacherId = t.getFkUserTeacherId();
-
-        //selecting the responsible table with right courses --> get_courses
-        Query q1 = em.createQuery(
-                "SELECT fk_course_teacher_id FROM responsible_for r "
-                        + "WHERE r.fk_fk_user_teacher_id = :currentTeacherId"
-        );
-        List<Integer> courseIds = q1.getResultList(); //list of the courses ids 
+        ArrayList<Course> courses = new ArrayList(em.createNamedQuery("Course.findAll", Course.class).getResultList());
         
-        for(int i : courseIds){
-            // 1)Get Course Price
-            Query q = em.createQuery("SELECT course.price FROM course WHERE course.course_id = " + i);
-            List<Integer> tmp_p = q.getResultList();
-            int p = tmp_p.get(0);
-            
-            //Get student
-            Query q2 = em.createQuery("SELECT fk_fk_user_student_id "
-                    + "FROM enrolled e WHERE e.course_student_id = " + i
-            );
-            List<Integer> studentIds = q2.getResultList();
-            for(int j:studentIds){
-                Query qq = em.createQuery("SELECT u FROM user u WHERE u.user_id = " + j);
-                List<Student> s_tmp = qq.getResultList();
-                Student s = s_tmp.get(0);
-                
-                Transaction tr = Transaction.createTransaction(s, t, p);
-                transactions.add(tr);
-                
+        
+        for(Course c : courses){
+            if(c.getFkTeacherId().equals(t)){
+                double price = c.getPrice();
+                Collection<User> enrolled = c.getUserCollection();
+                for(User s : enrolled){
+                    transactions.add(Transaction.createTransaction(s, t, price));
+                }
             }
         }
+
         return transactions;
-    }*/
+    }
 }

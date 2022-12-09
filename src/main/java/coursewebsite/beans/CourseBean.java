@@ -15,6 +15,7 @@ import javax.inject.Named;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
+import javax.transaction.Transactional;
 
 
 @Named(value = "courseBean")
@@ -115,24 +116,27 @@ public class CourseBean implements Serializable {
         return null;
     
     }*/
-
-    public void createACourse() throws AlreadyExistsException {
+    
+    @Transactional
+    public void createACourse()  { //throws AlreadyExistsException
         if(!doesCourseExist()){
             Course newCourse = new Course();
             newCourse.setTitle(courseTitle);
             newCourse.setPrice(price);
+            newCourse.setFkTeacherId(LoginBean.getUserLoggedIn());
             em.persist(newCourse);
             //need to do something for relation table?
         }
-        throw new AlreadyExistsException("Course " + courseTitle + " already exist.");
+        //throw new AlreadyExistsException("Course " + courseTitle + " already exist.");
     }
-
+    @Transactional
     public void deleteACourse(){
         User t = LoginBean.getUserLoggedIn();
-        if(searchCourse().getFkTeacherId().equals(t.getUserId())){
-            Query q = em.createNamedQuery("Course.findByTitle", Course.class);
-            List<Course> c = q.setParameter("title", courseTitle).getResultList();
-            em.remove(c.get(0));
+        Course c = searchCourse();
+        if(c.getFkTeacherId().equals(t)){
+            //Query q = em.createNamedQuery("Course.findByTitle", Course.class);
+            //List<Course> c = q.setParameter("title", courseTitle).getResultList();
+            em.remove(c);
         }
         courseTitle = "";
     }

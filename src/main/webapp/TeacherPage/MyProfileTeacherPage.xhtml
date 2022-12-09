@@ -23,31 +23,37 @@
         <h:form>
             <h:panelGrid columns="2">
                 <h:outputText value="Username:"/>
-                <h:outputText value="#{loginBean.currentTeacher.username}"/>
+                <h:outputText value="#{loginBean.currentUser.username}"/>
                 <h:outputText value="First Name:"/>
-                <h:outputText value="#{loginBean.currentTeacher.firstName}"/>
+                <h:outputText value="#{loginBean.currentUser.firstname}"/>
                 <h:outputText value="Last Name:"/>
-                <h:outputText value="#{loginBean.currentTeacher.lastName}"/>
+                <h:outputText value="#{loginBean.currentUser.lastname}"/>
                 <h:outputText value="Email:"/>
-                <h:outputText value="#{loginBean.currentTeacher.email}"/>
+                <h:outputText value="#{loginBean.currentUser.email}"/>
                 <h:outputText value="Balance:"/>
-                <h:outputText value="#{loginBean.currentTeacher.balance}"/>
+                <h:outputText value="#{loginBean.currentUser.balance}"/>
                 <br/>
             </h:panelGrid>
         </h:form>
         
+        <!-- ____________________________TR______________________________________-->
+        
         <h2>Your transactions</h2>
         <h:form>
             <p:dataTable var="t" value="#{userBean.getTeacherTransactions()}">
-            <p:column headerText="Transaction">
-                <h:outputText value="#{t.toString()}" />
-            </p:column>
-        </p:dataTable>
+                <p:column headerText="Transaction">
+                    <h:outputText value="#{t.toString()}" />
+                </p:column>
+            </p:dataTable>
         </h:form>
         
+        
+            <br/>
+            <br/>
+            
         <h2>Your Courses</h2>
         <h:form>
-            <p:dataTable var="co" value="#{loginBean.getTeacherLoggedIn().getUserCourses()}">
+            <p:dataTable var="co" value="#{userBean.getTeacherCourses()}">
                 <p:column headerText="Title">
                     <h:outputText value="#{co.title}" />
                 </p:column>
@@ -56,10 +62,6 @@
                 </p:column>
             </p:dataTable>
         </h:form>
-        
-        
-                    <br/>
-            <br/>
 
         
         <h:form>
