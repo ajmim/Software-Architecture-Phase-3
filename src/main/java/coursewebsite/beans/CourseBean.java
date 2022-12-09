@@ -61,6 +61,13 @@ public class CourseBean implements Serializable {
         return false;
     }
     
+    public Boolean doesCourseNotExist() throws DoesNotExistException {
+        Query query = em.createNamedQuery("Course.findByTitle", Course.class);
+        List<Course> courses = query.setParameter("title", courseTitle).getResultList();
+        if(courses.size() < 0){throw new DoesNotExistException("Course " + courses.get(0) + " doesn't exists.");}
+        return false;
+    }
+    
     @Transactional
     public void createACourse() throws AlreadyExistsException { 
         try{
@@ -77,11 +84,23 @@ public class CourseBean implements Serializable {
     }
     
     @Transactional
-    public void deleteACourse() {
-        User t = LoginBean.getUserLoggedIn();
-        Course c = searchCourse();
-        if(c.getFkTeacherId().equals(t)){em.remove(c);}
-        courseTitle = "";
+    public void deleteACourse() throws DoesNotExistException {
+        try{
+            User t = LoginBean.getUserLoggedIn();
+            Course c = searchCourse();
+            if (doesCourseNotExist()) {
+                return;
+            }
+            
+            if(c.getFkTeacherId().equals(t)){
+                em.remove(c);
+
+            }
+            courseTitle = "";
+        }catch(DoesNotExistException ex){
+            System.out.println(ex.getMessage());
+        }
+        
     }
 
     public double getPrice(){
