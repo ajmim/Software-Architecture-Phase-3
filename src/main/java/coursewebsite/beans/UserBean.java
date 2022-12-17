@@ -5,6 +5,7 @@ import java.io.Serializable;
 import javax.enterprise.context.SessionScoped;
 import javax.inject.Named;
 import coursewebsite.beans.LoginBean;
+import coursewebsite.client.PersistenceClient;
 import coursewebsite.exceptions.InsufficientBalanceException;
 import coursewebsite.models.Course;
 import coursewebsite.models.Transaction;
@@ -21,9 +22,6 @@ import javax.transaction.Transactional;
 @SessionScoped
 public class UserBean implements Serializable {
     
-    @PersistenceContext(unitName = "my_persistence_unit")
-    private EntityManager em;
-    
     private String email = "";
     private String username = "";
     private String firstName = "";
@@ -36,7 +34,9 @@ public class UserBean implements Serializable {
     @Transactional
     public void createAStudent() throws AlreadyExistsException {
         try{
-            if (!emailExists() && !usernameExists()) {        
+            boolean a = !PersistenceClient.getInstance().emailExists(email);
+            boolean b = PersistenceClient.getInstance().getUsersByName(username) == null;
+            if (a && b) {        
                 User newStudent = new User();
                 newStudent.setUsername(username);
                 newStudent.setFirstname(firstName);
@@ -44,7 +44,7 @@ public class UserBean implements Serializable {
                 newStudent.setEmail(email);
                 newStudent.setPassword(password);
                 newStudent.setCategory("student");
-                em.persist(newStudent);
+                PersistenceClient.getInstance().createUser(newStudent);
             } 
         } catch(AlreadyExistsException ex){
             System.out.println(ex.getMessage());
@@ -60,7 +60,9 @@ public class UserBean implements Serializable {
     @Transactional
     public void createATeacher() throws AlreadyExistsException{
         try{
-            if (!emailExists() && !usernameExists()) {
+            boolean a = !PersistenceClient.getInstance().emailExists(email);
+            boolean b = PersistenceClient.getInstance().getUsersByName(username) == null;
+            if (a && b) {
                 User t = new User();
                 t.setUsername(username);
                 t.setFirstname(firstName);
@@ -68,7 +70,7 @@ public class UserBean implements Serializable {
                 t.setEmail(email);
                 t.setPassword(password);
                 t.setCategory("teacher");
-                em.persist(t);
+                PersistenceClient.getInstance().createUser(t);
             }
         } catch(AlreadyExistsException ex){
             System.out.println(ex.getMessage());
@@ -85,7 +87,7 @@ public class UserBean implements Serializable {
     public void increaseBalance() {
         User s = LoginBean.getUserLoggedIn();
         s.setBalance(s.getBalance() + amount);
-        em.merge(s);
+        PersistenceClient.getInstance().updateUser(s);
         // empty value
         this.amount = 0.0;
     }
@@ -108,14 +110,14 @@ public class UserBean implements Serializable {
             // ADDING TO THE REL. TABLE
             Collection<User> tmp = c.getUserCollection();
             tmp.add(s);
-            em.merge(c);
-            em.merge(s);
-            em.merge(t);
+            PersistenceClient.getInstance().updateUser(c);
+            PersistenceClient.getInstance().updateUser(s);
+            PersistenceClient.getInstance().updateUser(t);
         }
         
     }
     
-    @Transactional
+    //@Transactional
     public void completeEnroll(Course course) throws InsufficientBalanceException, AlreadyExistsException  {
         try{
             enroll(course);
@@ -123,8 +125,10 @@ public class UserBean implements Serializable {
             System.out.println(ex.getMessage());
         }
     }
-
-    private boolean emailExists() throws AlreadyExistsException {
+    
+    // MOMO : I am removing it because we added it in Client file
+    //
+    /*private boolean emailExists() throws AlreadyExistsException {
         Query query = em.createQuery("SELECT u.email FROM User u WHERE u.email = :email").setParameter("email", email);
         List<User> users = query.getResultList();
         if(users.size() > 0){throw new AlreadyExistsException("Email already exists.");}
@@ -136,7 +140,7 @@ public class UserBean implements Serializable {
         List<User> users = query.getResultList();
         if(users.size() > 0){throw new AlreadyExistsException("username already exists.");}
         return false;
-    }
+    }*/
     
     public double getAmount() {
         return amount;
