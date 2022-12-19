@@ -1,106 +1,75 @@
 package coursewebsite.beans;
 
-import coursewebsite.exceptions.AlreadyExistsException;
-import coursewebsite.exceptions.DoesNotExistException;
 import coursewebsite.models.Course;
 import coursewebsite.models.User;
-
-
+import coursewebsite.client.PersistenceClient;
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.List;
-
 import javax.enterprise.context.SessionScoped;
 import javax.inject.Named;
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
-import javax.persistence.Query;
-import javax.transaction.Transactional;
+
 
 
 @Named(value = "courseBean")
 @SessionScoped
 public class CourseBean implements Serializable {
-   
-    @PersistenceContext(unitName = "my_persistence_unit")
-    private EntityManager em;
     
     private String courseTitle = "";
     private double price = 0.0;
  
  
     public ArrayList<Course> getCourses() {
-        return new ArrayList(em.createNamedQuery("Course.findAll", Course.class).getResultList());
+        return new ArrayList(PersistenceClient.getInstance().getAllCourses());
     }
 
-    public Course findCourseByTitle() throws DoesNotExistException {
-        Query query = em.createNamedQuery("Course.findByTitle", Course.class);
-        List<Course> courses = query.setParameter("title", courseTitle).getResultList();
-        if (courses.size() > 0) {
-            return courses.get(0);
-        }
-        throw new DoesNotExistException("Course " + courseTitle + " does not exist.");
-    }
+    /*public Course findCourseByTitle() throws DoesNotExistException {
+        return PersistenceClient.getInstance().getCourseByTitle(courseTitle);
+    }*/
     
     public Course searchCourse(){
-        try {
-            return findCourseByTitle();
-        } catch (DoesNotExistException ex) {
-            System.out.println(ex.getMessage());
-        }
-        // empty values
-        this.courseTitle = "";
-        return null;
-    
+        return PersistenceClient.getInstance().getCourseByTitle(courseTitle);
     }
     
-    public Boolean doesCourseExist() throws AlreadyExistsException {
-        Query query = em.createNamedQuery("Course.findByTitle", Course.class);
-        List<Course> courses = query.setParameter("title", courseTitle).getResultList();
-        if(courses.size() > 0){throw new AlreadyExistsException("Course " + courses.get(0) + " already exists.");}
+    public Boolean doesCourseExist() {
+        Course c = searchCourse();
+        if(c != null){return true;}
         return false;
     }
     
-    public Boolean doesCourseNotExist() throws DoesNotExistException {
-        Query query = em.createNamedQuery("Course.findByTitle", Course.class);
-        List<Course> courses = query.setParameter("title", courseTitle).getResultList();
-        if(courses.size() < 0){throw new DoesNotExistException("Course " + courses.get(0) + " doesn't exists.");}
+    public Boolean doesCourseNotExist() {
+        Course c = searchCourse();
+        if(c == null){return true;}
         return false;
     }
     
-    @Transactional
-    public void createACourse() throws AlreadyExistsException { 
-        try{
+    //@Transactional
+    public void createACourse() { 
+      
             if(!doesCourseExist()){
                 Course newCourse = new Course();
                 newCourse.setTitle(courseTitle);
                 newCourse.setPrice(price);
                 newCourse.setFkTeacherId(LoginBean.getUserLoggedIn());
-                em.persist(newCourse);
+                PersistenceClient.getInstance().createCourse(newCourse);
             }
-        }catch(AlreadyExistsException ex){
-            System.out.println(ex.getMessage());
-        }
+    
     }
     
-    @Transactional
-    public void deleteACourse() throws DoesNotExistException {
-        try{
+    //@Transactional
+    public void deleteACourse()  {      
             User t = LoginBean.getUserLoggedIn();
             Course c = searchCourse();
             if (doesCourseNotExist()) {
+                System.out.print("----------------TEST 1-------------");
                 return;
             }
-            
-            if(c.getFkTeacherId().equals(t)){
-                em.remove(c);
+            //if(c.getFkTeacherId().equals(t)){
+            if(t != null){
+                System.out.print("----------------TEST 2-------------");
 
+                PersistenceClient.getInstance().removeCourse(c.getCourseId());
             }
             courseTitle = "";
-        }catch(DoesNotExistException ex){
-            System.out.println(ex.getMessage());
-        }
-        
     }
 
     public double getPrice(){

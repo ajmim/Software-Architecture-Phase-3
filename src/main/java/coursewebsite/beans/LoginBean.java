@@ -9,14 +9,13 @@ import java.io.Serializable;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import javax.persistence.Query;
-/**
- *
- * @author IsmaTew
- */
+
+import coursewebsite.client.PersistenceClient;
+import java.io.IOException;
+
+
 @Named(value = "loginBean")
-//@SuppressWarnings("unchecked")
-//@transactionnal 
+
 @SessionScoped
 public class LoginBean implements Serializable {
 
@@ -27,10 +26,10 @@ public class LoginBean implements Serializable {
     private String password = "";
     private static User currentUser;
 
-    public String studentLogsIn() {
+    public String studentLogsIn() throws IOException {
         try {
-            User user = findUserByUsername();
-            if (user != null && user.isPasswordCorrect(password) && "student".equals(user.getCategory())) {
+            User user = PersistenceClient.getInstance().checkPassword(username, password);
+            if (user != null && "student".equals(user.getCategory())) {
                 currentUser = user;
                 return "/StudentPage/StudentMainPage.xhtml?faces-redirect=true"; 
             }
@@ -42,8 +41,8 @@ public class LoginBean implements Serializable {
     
     public String teacherLogsIn() {
         try {
-            User user = findUserByUsername();
-            if (user != null && user.isPasswordCorrect(password) && "teacher".equals(user.getCategory())) {
+            User user = PersistenceClient.getInstance().checkPassword(username, password);
+            if (user != null && "teacher".equals(user.getCategory())) {
                 currentUser = user;
                 return "/TeacherPage/TeacherMainPage.xhtml?faces-redirect=true";
             }
@@ -53,14 +52,14 @@ public class LoginBean implements Serializable {
         return "/MainPage/MainPage.xhtml?faces-redirect=true";
     }
     
-    protected User findUserByUsername() throws DoesNotExistException {
+    /*protected User findUserByUsername() throws DoesNotExistException {
         Query query = em.createNamedQuery("User.findByUsername", User.class);
         List<User> s = query.setParameter("username", username).getResultList();
         if (s.size() > 0) {
             return s.get(0);
         }
         throw new DoesNotExistException("The user " + username + " does not exist.");
-    }
+    }*/
     
     public String userLogsout() {
         currentUser = null;

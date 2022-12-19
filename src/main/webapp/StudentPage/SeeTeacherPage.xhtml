@@ -42,8 +42,11 @@
             <br/>            
             <br/>             
                 <p:dataTable var="t" value="#{userBean.getAllTeachers()}">
-                    <p:column headerText="Teacher">
+                    <p:column headerText="Firstname">
                         <h:outputText value="#{t.firstname}" />
+                    </p:column>
+                    <p:column headerText="Lastname">
+                        <h:outputText value="#{t.lastname}" />
                     </p:column>
                 </p:dataTable>
 

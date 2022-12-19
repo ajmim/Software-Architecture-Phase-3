@@ -3,6 +3,7 @@ package coursewebsite.models;
 import coursewebsite.models.Course;
 import java.util.Collection;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 
 @XmlRootElement
 public class User {
@@ -97,11 +98,11 @@ public class User {
     public Collection<Course> getCourseCollection() {
         return courseCollection;
     }
-
+    
     public void setCourseCollection(Collection<Course> courseCollection) {
         this.courseCollection = courseCollection;
     }
-
+    
     public Collection<Course> getCourseCollection1() {
         return courseCollection1;
     }

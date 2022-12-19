@@ -13,10 +13,7 @@ import coursewebsite.models.User;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
-import javax.persistence.Query;
-import javax.transaction.Transactional;
+
 
 @Named(value = "userBean")
 @SessionScoped
@@ -31,7 +28,7 @@ public class UserBean implements Serializable {
     private String category = "";
     
 
-    @Transactional
+    //@Transactional
     public void createAStudent() throws AlreadyExistsException {
         try{
             boolean a = !PersistenceClient.getInstance().emailExists(email);
@@ -57,7 +54,7 @@ public class UserBean implements Serializable {
         this.password = "";
         }
     
-    @Transactional
+    //@Transactional
     public void createATeacher() throws AlreadyExistsException{
         try{
             boolean a = !PersistenceClient.getInstance().emailExists(email);
@@ -83,7 +80,7 @@ public class UserBean implements Serializable {
         this.password = "";
     }
     
-    @Transactional
+    //@Transactional
     public void increaseBalance() {
         User s = LoginBean.getUserLoggedIn();
         s.setBalance(s.getBalance() + amount);
@@ -92,25 +89,33 @@ public class UserBean implements Serializable {
         this.amount = 0.0;
     }
     
-    @Transactional
-    public void enroll(Course c)throws InsufficientBalanceException, AlreadyExistsException { 
+    //@Transactional
+    public void enroll(Course c){ //throws InsufficientBalanceException, AlreadyExistsException 
         User s = LoginBean.getUserLoggedIn();
         User t = c.getFkTeacherId();
         
-        Collection<Course> userCourses = s.getCourseCollection();
+        //List<Course> userCourses = PersistenceClient.getInstance().getStudentCourses(s.getUserId());
+        List<User> tmp = PersistenceClient.getInstance().getEnrolledStudents(c.getCourseId());
+        //List<User> enrolledStudents = PersistenceClient.getInstance().getEnrolledStudents(c.getCourseId());
+        
+        /*
         if(s.getBalance() < c.getPrice()){
             throw new InsufficientBalanceException("you don't have enough money in your account.");
         }if(userCourses.contains(c)){
             throw new AlreadyExistsException("You are already enrolled in this course.");
         }
+        */
         
-        if(s.getBalance() > c.getPrice() && !userCourses.contains(c)){
+        if(s.getBalance() > c.getPrice() && !tmp.contains(s)){
             s.setBalance(s.getBalance() - c.getPrice());
             t.setBalance(t.getBalance() + c.getPrice());
             // ADDING TO THE REL. TABLE
-            Collection<User> tmp = c.getUserCollection();
             tmp.add(s);
-            PersistenceClient.getInstance().updateUser(c);
+            c.setUserCollection(tmp);
+            
+            //--------------------ADD COURSE UPDATE -------------------------
+            
+            PersistenceClient.getInstance().updateCourse(c);
             PersistenceClient.getInstance().updateUser(s);
             PersistenceClient.getInstance().updateUser(t);
         }
@@ -119,11 +124,11 @@ public class UserBean implements Serializable {
     
     //@Transactional
     public void completeEnroll(Course course) throws InsufficientBalanceException, AlreadyExistsException  {
-        try{
+        //try{
             enroll(course);
-        }catch(InsufficientBalanceException | AlreadyExistsException ex){
-            System.out.println(ex.getMessage());
-        }
+        //}catch(InsufficientBalanceException | AlreadyExistsException ex){
+        //    System.out.println(ex.getMessage());
+        //}
     }
     
     // MOMO : I am removing it because we added it in Client file
@@ -195,32 +200,19 @@ public class UserBean implements Serializable {
         this.amount = amount;
     }
     
-    public List<Course> getStudentCourses(){
+    public Collection<Course> getStudentCourses(){
         int user_id = LoginBean.getUserLoggedIn().getUserId();
-
-        Query q = em.createQuery("SELECT c FROM Course c INNER JOIN c.userCollection u WHERE u.userId = :user_id"
-                , Course.class).setParameter("user_id", user_id);
-        
-        return q.getResultList();
+        return PersistenceClient.getInstance().getStudentCourses(user_id);
     }
     
-    public ArrayList<Course> getTeacherCourses(){
-        User t = LoginBean.getUserLoggedIn();
-        //int currentStudentId = t.getUserId();
-        ArrayList<Course> courses = new ArrayList(em.createNamedQuery("Course.findAll", Course.class).getResultList());
-        ArrayList<Course> t_courses = new ArrayList();
-        for(Course c : courses){
-            if(c.getFkTeacherId().equals(t)){
-                t_courses.add(c);
-                }
-            }
-        return t_courses;
+    public List<Course> getTeacherCourses(){
+        int user_id = LoginBean.getUserLoggedIn().getUserId();
+        return PersistenceClient.getInstance().getTeacherCourses(user_id);
     }
+    
     
     public List<User> getAllTeachers() {
-        Query q = em.createNamedQuery("User.findByCategory", User.class).setParameter("category", "teacher");
-        List<User> teachers = q.getResultList();
-        return teachers;
+return PersistenceClient.getInstance().getAllTeachers();
     }
     
     public ArrayList<Transaction> getStudentTransactions() {
@@ -228,7 +220,7 @@ public class UserBean implements Serializable {
         int currentStudentId = s.getUserId();
         ArrayList<Transaction> transactions = new ArrayList<>();
         
-        for (Course c : getStudentCourses()){
+        for (Course c : PersistenceClient.getInstance().getStudentCourses(currentStudentId)){
             User teacher_id = c.getFkTeacherId();
             double c_price = c.getPrice();
             transactions.add(Transaction.createTransaction(s, teacher_id, c_price)); 
@@ -242,7 +234,7 @@ public class UserBean implements Serializable {
         User t = LoginBean.getUserLoggedIn();
         //int currentStudentId = t.getUserId();
         ArrayList<Transaction> transactions = new ArrayList<>();
-        ArrayList<Course> courses = new ArrayList(em.createNamedQuery("Course.findAll", Course.class).getResultList());
+        ArrayList<Course> courses = new ArrayList(PersistenceClient.getInstance().getAllCourses());
 
         for(Course c : courses){
             if(c.getFkTeacherId().equals(t)){

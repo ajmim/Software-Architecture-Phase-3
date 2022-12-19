@@ -3,6 +3,7 @@ package coursewebsite.models;
 import java.io.Serializable;
 import java.util.Collection;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 
 @XmlRootElement
 public class Course implements Serializable {
@@ -43,7 +44,7 @@ public class Course implements Serializable {
     public void setPrice(Double price) {
         this.price = price;
     }
-
+    
     public Collection<User> getUserCollection() {
         return userCollection;
     }
